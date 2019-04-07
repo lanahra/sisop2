@@ -7,11 +7,10 @@ include(Colors)
 
 
 set(SOURCES
-    src/example.cpp
+    src/server/user.cpp
     )
 set(TESTFILES
-    tests/dummy.cpp
-    tests/main.cpp
+    tests/server/user_test.cpp
     )
 
 add_library(engine ${SOURCES})
@@ -20,8 +19,11 @@ target_include_directories(engine
     PUBLIC ${PROJECT_SOURCE_DIR}/include
     )
 
-add_executable(main.x app/main.cpp)
-target_link_libraries(main.x PRIVATE engine)
+add_executable(server app/server.cpp)
+target_link_libraries(server PRIVATE engine pthread)
+
+add_executable(client app/client.cpp)
+target_link_libraries(client PRIVATE engine pthread)
 
 target_compile_options(engine PRIVATE
     # clang/GCC warnings
@@ -32,7 +34,7 @@ target_compile_options(engine PRIVATE
     "/Wall" >
     )
 
-set_target_properties(engine main.x PROPERTIES
+set_target_properties(engine server client PROPERTIES
     CXX_STANDARD 11
     CXX_STANDARD_REQUIRED YES
     CXX_EXTENSIONS NO
