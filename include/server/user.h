@@ -15,6 +15,7 @@ class User {
     std::list<Session> sessions;
 
   public:
+    User(std::string name);
     User(std::string name, std::list<File> files);
     void establishSession(Session session);
 

@@ -2,14 +2,15 @@
 #define USER_REPOSITORY_H
 
 #include <string>
+#include <memory>
 #include "user.h"
 
 class UserRepository {
   public:
-    UserRepository();
+    UserRepository() = default;
     virtual ~UserRepository() = default;
 
-    virtual User get(std::string name) = 0;
-}
+    virtual std::shared_ptr<User> get(std::string name) = 0;
+};
 
 #endif

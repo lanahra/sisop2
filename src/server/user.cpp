@@ -1,4 +1,8 @@
-#include <server/user.h>
+#include "server/user.h"
+
+User::User(std::string name) : name(name) {
+    // empty constructor
+}
 
 User::User(std::string name, std::list<File> files) : name(name), files(files) {
     // empty constructor
