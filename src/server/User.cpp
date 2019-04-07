@@ -1,4 +1,4 @@
-#include "server/user.h"
+#include "server/User.h"
 
 User::User(std::string name) : name(name) {
     // empty constructor

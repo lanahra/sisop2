@@ -2,7 +2,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "infra/repository/file_user_repository.h"
+#include "infra/repository/FileUserRepository.h"
 
 class FileUserRepositoryTest : public ::testing::Test {
   protected:

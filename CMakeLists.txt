@@ -7,12 +7,12 @@ include(Colors)
 
 
 set(SOURCES
-    src/infra/repository/file_user_repository.cpp
-    src/server/user.cpp
+    src/infra/repository/FileUserRepository.cpp
+    src/server/User.cpp
     )
 set(TESTFILES
-    tests/infra/repository/file_user_repository_test.cpp
-    tests/server/user_test.cpp
+    tests/infra/repository/FileUserRepositoryTest.cpp
+    tests/server/UserTest.cpp
     )
 
 add_library(engine ${SOURCES})

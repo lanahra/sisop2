@@ -3,7 +3,7 @@
 
 #include <string>
 #include <memory>
-#include "user.h"
+#include "User.h"
 
 class UserRepository {
   public:

@@ -4,8 +4,8 @@
 #include <string>
 #include <list>
 #include <stdexcept>
-#include "file.h"
-#include "session.h"
+#include "File.h"
+#include "Session.h"
 
 class User {
     const unsigned int MAX_ESTABLISHED_SESSIONS = 2;

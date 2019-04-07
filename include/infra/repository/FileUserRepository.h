@@ -3,7 +3,7 @@
 
 #include <string>
 #include <memory>
-#include "server/user_repository.h"
+#include "server/UserRepository.h"
 
 class FileUserRepository : public UserRepository {
     const std::string SYNC_DIR_PREFIX = "sync_dir_";

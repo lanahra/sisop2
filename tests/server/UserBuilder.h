@@ -3,7 +3,7 @@
 
 #include <string>
 #include <list>
-#include "server/user.h"
+#include "server/User.h"
 
 class UserBuilder {
     std::string name = "a user";

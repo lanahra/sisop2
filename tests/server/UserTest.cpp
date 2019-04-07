@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "user_builder.h"
+#include "UserBuilder.h"
 
 TEST(UserTest, EstablishesNewSession) {
     User user = UserBuilder().build();
