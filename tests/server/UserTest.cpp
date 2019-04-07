@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include "UserBuilder.h"
+
+using ::testing::Eq;
 
 TEST(UserTest, EstablishesNewSession) {
     User user = UserBuilder().build();
@@ -8,7 +11,7 @@ TEST(UserTest, EstablishesNewSession) {
     user.establishSession(session);
 
     std::list<Session> expected({session});
-    EXPECT_EQ(user.getSessions(), expected);
+    EXPECT_THAT(user.getSessions(), Eq(expected));
 }
 
 TEST(UserTest, ThrowsExceptionForTooManySessions) {

@@ -19,6 +19,10 @@ class User {
     User(std::string name, std::list<File> files);
     void establishSession(Session session);
 
+    std::list<File> getFiles() {
+        return files;
+    }
+
     std::list<Session> getSessions() {
         return sessions;
     }

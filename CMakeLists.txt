@@ -8,6 +8,7 @@ include(Colors)
 
 set(SOURCES
     src/infra/repository/FileUserRepository.cpp
+    src/server/File.cpp
     src/server/User.cpp
     )
 set(TESTFILES
