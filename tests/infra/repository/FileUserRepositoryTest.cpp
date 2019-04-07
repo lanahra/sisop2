@@ -9,7 +9,7 @@
 using ::testing::Eq;
 using ::testing::IsTrue;
 using ::testing::IsEmpty;
-using ::testing::ContainerEq;
+using ::testing::UnorderedElementsAre;
 
 class FileUserRepositoryTest : public ::testing::Test {
   protected:
@@ -44,6 +44,6 @@ TEST_F(FileUserRepositoryTest, LoadsFilesFromSyncDir) {
 
     std::shared_ptr<User> user = repository->get(name);
 
-    std::list<File> expected({File("file_a"), File("file_b")});
-    EXPECT_THAT(user->getFiles(), ContainerEq(expected));
+    EXPECT_THAT(user->getFiles(),
+                UnorderedElementsAre(File("file_a"), File("file_b")));
 }
