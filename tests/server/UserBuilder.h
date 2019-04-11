@@ -7,11 +7,10 @@
 
 class UserBuilder {
     std::string name = "a user";
-    std::list<File> files;
 
   public:
     User build() {
-        return User(name, files);
+        return User(name);
     }
 };
 

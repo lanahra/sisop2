@@ -37,13 +37,3 @@ TEST_F(FileUserRepositoryTest, CreatesSyncDirIfNotExists) {
     EXPECT_THAT(S_ISDIR(st.st_mode), IsTrue());
     EXPECT_THAT(user->getFiles(), IsEmpty());
 }
-
-TEST_F(FileUserRepositoryTest, LoadsFilesFromSyncDir) {
-    system("rsync -a --delete ../tests/resources/sync_dir_paul .");
-    std::string name = "paul";
-
-    std::shared_ptr<User> user = repository->get(name);
-
-    EXPECT_THAT(user->getFiles(),
-                UnorderedElementsAre(File("file_a"), File("file_b")));
-}

@@ -11,17 +11,11 @@ class User {
     const unsigned int MAX_ESTABLISHED_SESSIONS = 2;
 
     std::string name;
-    std::list<File> files;
     std::list<Session> sessions;
 
   public:
     User(std::string name);
-    User(std::string name, std::list<File> files);
     void establishSession(Session session);
-
-    std::list<File> getFiles() {
-        return files;
-    }
 
     std::list<Session> getSessions() {
         return sessions;
