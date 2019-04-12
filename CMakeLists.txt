@@ -8,12 +8,14 @@ include(Colors)
 
 set(SOURCES
     # src/infra/repository/FileUserRepository.cpp
+    src/infra/messaging/TcpSocket.cpp
     src/infra/repository/SystemFileRepository.cpp
     src/server/File.cpp
     src/server/User.cpp
     )
 set(TESTFILES
     # tests/infra/repository/FileUserRepositoryTest.cpp
+    tests/infra/messaging/TcpSocketTest.cpp
     tests/infra/repository/SystemFileRepositoryTest.cpp
     tests/server/FileTest.cpp
     tests/server/TimestampsTest.cpp
