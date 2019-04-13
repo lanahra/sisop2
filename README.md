@@ -1,4 +1,4 @@
-# sisop2 ![Travis (.org)](https://img.shields.io/travis/lanahra/sisop2.svg) ![Codecov](https://img.shields.io/codecov/c/github/lanahra/sisop2.svg)
+# sisop2 ![https://travis-ci.org/lanahra/sisop2](https://img.shields.io/travis/lanahra/sisop2.svg) ![https://codecov.io/gh/lanahra/sisop2](https://img.shields.io/codecov/c/github/lanahra/sisop2.svg)
 
 ## Build
 ```bash
