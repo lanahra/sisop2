@@ -3,12 +3,19 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
+#include <cerrno>
+#include <cstring>
 
 TcpSocket::TcpSocket() {
     socket_ = socket(AF_INET, SOCK_STREAM, 0);
 }
 
 TcpSocket::TcpSocket(int socket_) : socket_(socket_){};
+
+TcpSocket::~TcpSocket() {
+    ::close(socket_);
+}
 
 void TcpSocket::listen(int port) {
     struct sockaddr_in address = addressFrom(port);
@@ -40,4 +47,51 @@ struct sockaddr_in TcpSocket::addressFrom(std::string host, int port) {
     address.sin_addr.s_addr = inet_addr(host.c_str());
     address.sin_port = htons(port);
     return address;
+}
+
+int TcpSocket::readInt() {
+    int n;
+    read((void*)&n, sizeof(n));
+    return ntohl(n);
+}
+
+std::string TcpSocket::read(int length) {
+    std::string output(length, 0);
+    read(&output[0], length);
+    return output;
+}
+
+void TcpSocket::read(void* buffer, int length) {
+    int totalRead = 0;
+    int bytesRead;
+    while (totalRead < length) {
+        bytesRead
+            = ::read(socket_, (char*)buffer + totalRead, length - totalRead);
+        if (bytesRead < 0) {
+            throw SocketException(std::strerror(errno));
+        }
+        totalRead += bytesRead;
+    }
+}
+
+void TcpSocket::writeInt(int n) {
+    int w = htonl(n);
+    write((void*)&w, sizeof(n));
+}
+
+void TcpSocket::write(std::string s) {
+    write(&s[0], sizeof(s));
+}
+
+void TcpSocket::write(void* buffer, int length) {
+    int totalWritten = 0;
+    int bytesWritten;
+    while (totalWritten < length) {
+        bytesWritten = ::write(
+            socket_, (char*)buffer + totalWritten, length - totalWritten);
+        if (bytesWritten < 0) {
+            throw SocketException(std::strerror(errno));
+        }
+        totalWritten += bytesWritten;
+    }
 }

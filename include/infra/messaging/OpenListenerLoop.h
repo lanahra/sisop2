@@ -5,7 +5,7 @@
 
 class OpenListenerLoop : public ListenerLoop {
   public:
-    bool isOpen() {
+    bool isOpen() override {
         return true;
     }
 };
