@@ -8,6 +8,7 @@ include(Colors)
 
 set(SOURCES
     src/infra/messaging/AsyncMessageListener.cpp
+    src/infra/messaging/BlockingMessageListener.cpp
     src/infra/messaging/ConnectionListener.cpp
     src/infra/messaging/TcpSocket.cpp
     src/infra/repository/SystemFileRepository.cpp
@@ -16,6 +17,7 @@ set(SOURCES
     )
 set(TESTFILES
     tests/infra/messaging/AsyncMessageListenerTest.cpp
+    tests/infra/messaging/BlockingMessageListenerTest.cpp
     tests/infra/messaging/ConnectionListenerTest.cpp
     tests/infra/messaging/OpenListenerLoopTest.cpp
     tests/infra/messaging/TcpSocketTest.cpp
