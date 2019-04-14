@@ -19,7 +19,9 @@ set(TESTFILES
     tests/infra/messaging/AsyncMessageListenerTest.cpp
     tests/infra/messaging/BlockingMessageListenerTest.cpp
     tests/infra/messaging/ConnectionListenerTest.cpp
+    tests/infra/messaging/MessageTest.cpp
     tests/infra/messaging/OpenListenerLoopTest.cpp
+    tests/infra/messaging/SerializedMessageHandlerTest.cpp
     tests/infra/messaging/TcpSocketTest.cpp
     tests/infra/repository/SystemFileRepositoryTest.cpp
     tests/server/FileTest.cpp
