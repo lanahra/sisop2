@@ -15,11 +15,11 @@ TEST(AsyncMessageListenerTest, StartsListeningInAnotherThread) {
     std::mutex m;
     std::condition_variable cv;
     bool ready = false;
-    MockMessageListener listener;
-    EXPECT_CALL(listener, listen())
-        .WillOnce(ReturnAsync(&m, &cv, &ready));
+    auto listener
+        = std::unique_ptr<MockMessageListener>(new MockMessageListener());
+    EXPECT_CALL(*listener, listen()).WillOnce(ReturnAsync(&m, &cv, &ready));
 
-    AsyncMessageListener asyncListener(listener);
+    AsyncMessageListener asyncListener(std::move(listener));
     asyncListener.listen();
 
     std::unique_lock<std::mutex> lk(m);

@@ -4,12 +4,12 @@
 
 void BlockingMessageListener::listen() {
     while (listenerLoop.isOpen()) {
-        int length = socket.readInt();
-        std::string serialized = socket.read(length);
+        int length = socket->readInt();
+        std::string serialized = socket->read(length);
         Message message = messageFrom(serialized);
         std::shared_ptr<MessageHandler> handler
             = handlerFor(message.getOperation());
-        handler->handle(message.getBody(), socket);
+        handler->handle(message.getBody(), *socket);
     }
 }
 

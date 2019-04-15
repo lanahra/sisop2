@@ -22,7 +22,7 @@ class Message {
     }
 
     friend std::ostream& operator<<(std::ostream& out, const Message& self) {
-        out << self.operation.size() << ',' << self.operation << ','
+        return out << self.operation.size() << ',' << self.operation << ','
             << self.body.size() << ',' << self.body;
     }
 
@@ -37,6 +37,7 @@ class Message {
         in.ignore(1, ',');
         self.body.resize(size);
         in.read(&self.body[0], size);
+        return in;
     }
 };
 

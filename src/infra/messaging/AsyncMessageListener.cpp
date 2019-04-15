@@ -3,6 +3,8 @@
 #include <thread>
 
 void AsyncMessageListener::listen() {
-    std::thread t(&MessageListener::listen, &listener);
+    std::thread t(
+        [](std::unique_ptr<MessageListener> listener) { listener->listen(); },
+        std::move(listener));
     t.detach();
 }

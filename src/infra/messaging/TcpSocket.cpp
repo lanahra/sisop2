@@ -80,7 +80,7 @@ void TcpSocket::writeInt(int n) {
 }
 
 void TcpSocket::write(std::string s) {
-    write(&s[0], sizeof(s));
+    write(&s[0], s.size());
 }
 
 void TcpSocket::write(void* buffer, int length) {

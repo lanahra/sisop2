@@ -1,8 +1,12 @@
 #include "infra/messaging/ConnectionListener.h"
 
+#include <memory>
+
 void ConnectionListener::listen(int port) {
     socket.listen(port);
     while (listenerLoop.isOpen()) {
-        socket.accept();
+        std::shared_ptr<Socket> client = socket.accept();
+        auto listener = factory.listenerFor(client);
+        listener->listen();
     }
 }

@@ -1,13 +1,15 @@
 #ifndef ASYNC_MESSAGE_LISTENER_H
 #define ASYNC_MESSAGE_LISTENER_H
 
+#include <memory>
 #include "MessageListener.h"
 
 class AsyncMessageListener : public MessageListener {
-    MessageListener& listener;
+    std::unique_ptr<MessageListener> listener;
 
   public:
-    AsyncMessageListener(MessageListener& listener) : listener(listener){};
+    AsyncMessageListener(std::unique_ptr<MessageListener> listener)
+        : listener(std::move(listener)){};
     void listen() override;
 };
 

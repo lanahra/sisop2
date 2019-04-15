@@ -13,11 +13,11 @@ using ::testing::Return;
 using ::testing::Ref;
 
 TEST(BlockingMessageListenerTest, ReadsMessageFromSocket) {
-    MockSocket socket;
+    std::shared_ptr<MockSocket> socket = std::make_shared<MockSocket>();
     {
         InSequence s;
-        EXPECT_CALL(socket, readInt()).WillOnce(Return(18));
-        EXPECT_CALL(socket, read(18)).WillOnce(Return("9,operation,4,8888"));
+        EXPECT_CALL(*socket, readInt()).WillOnce(Return(18));
+        EXPECT_CALL(*socket, read(18)).WillOnce(Return("9,operation,4,8888"));
     }
 
     MockListenerLoop listenerLoop;
@@ -27,7 +27,7 @@ TEST(BlockingMessageListenerTest, ReadsMessageFromSocket) {
 
     std::shared_ptr<MockMessageHandler> handler
         = std::make_shared<MockMessageHandler>();
-    EXPECT_CALL(*handler, handle("8888", Ref(socket)));
+    EXPECT_CALL(*handler, handle("8888", Ref(*socket)));
 
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
     handlers["operation"] = handler;

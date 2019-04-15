@@ -11,7 +11,7 @@
 #include "Message.h"
 
 class BlockingMessageListener : public MessageListener {
-    Socket& socket;
+    std::shared_ptr<Socket> socket;
     ListenerLoop& listenerLoop;
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
 
@@ -20,7 +20,7 @@ class BlockingMessageListener : public MessageListener {
 
   public:
     BlockingMessageListener(
-        Socket& socket,
+        std::shared_ptr<Socket> socket,
         ListenerLoop& listenerLoop,
         std::map<std::string, std::shared_ptr<MessageHandler>> handlers)
         : socket(socket), listenerLoop(listenerLoop), handlers(handlers){};
