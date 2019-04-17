@@ -3,15 +3,16 @@
 #include <sstream>
 #include <iostream>
 
-void EstablishSessionHandler::handle(std::string message, Socket& socket) {
+void EstablishSessionHandler::handle(std::string message,
+                                     MessageStreamer& messageStreamer) {
     std::stringstream serialized(message);
     EstablishSessionRequest request;
     serialized >> request;
-    handle(request, socket);
+    handle(request, messageStreamer);
 }
 
 void EstablishSessionHandler::handle(EstablishSessionRequest request,
-                                     Socket& socket) {
-    std::cout << request.getUsername();
+                                     MessageStreamer& messageStreamer) {
+    std::cout << request.getUsername() << '\n';
     std::cout.flush();
 }

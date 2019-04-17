@@ -4,11 +4,11 @@
 #include <gmock/gmock.h>
 #include <string>
 #include "infra/messaging/MessageHandler.h"
-#include "infra/messaging/Socket.h"
+#include "infra/messaging/MessageStreamer.h"
 
 class MockMessageHandler : public MessageHandler {
   public:
-    MOCK_METHOD2(handle, void(std::string, Socket&));
+    MOCK_METHOD2(handle, void(std::string, MessageStreamer&));
 };
 
 #endif

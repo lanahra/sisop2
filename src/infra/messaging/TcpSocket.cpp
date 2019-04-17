@@ -1,4 +1,5 @@
 #include "infra/messaging/TcpSocket.h"
+#include "infra/messaging/SocketException.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -67,7 +68,7 @@ void TcpSocket::read(void* buffer, int length) {
     while (totalRead < length) {
         bytesRead
             = ::read(socket_, (char*)buffer + totalRead, length - totalRead);
-        if (bytesRead < 0) {
+        if (bytesRead <= 0) {
             throw SocketException(std::strerror(errno));
         }
         totalRead += bytesRead;
@@ -89,7 +90,7 @@ void TcpSocket::write(void* buffer, int length) {
     while (totalWritten < length) {
         bytesWritten = ::write(
             socket_, (char*)buffer + totalWritten, length - totalWritten);
-        if (bytesWritten < 0) {
+        if (bytesWritten <= 0) {
             throw SocketException(std::strerror(errno));
         }
         totalWritten += bytesWritten;

@@ -29,9 +29,4 @@ class TcpSocket : public Socket {
     void write(std::string s) override;
 };
 
-class SocketException : public std::runtime_error {
-  public:
-    SocketException(std::string error) : std::runtime_error(error){};
-};
-
 #endif

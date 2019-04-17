@@ -2,12 +2,12 @@
 #define MESSAGE_HANDLER_H
 
 #include <string>
-#include "Socket.h"
+#include "MessageStreamer.h"
 
 class MessageHandler {
   public:
     virtual ~MessageHandler() = default;
-    virtual void handle(std::string message, Socket& socket) = 0;
+    virtual void handle(std::string message, MessageStreamer& socket) = 0;
 };
 
 #endif

@@ -12,6 +12,7 @@ set(SOURCES
     src/infra/messaging/AsyncMessageListenerFactory.cpp
     src/infra/messaging/BlockingMessageListener.cpp
     src/infra/messaging/ConnectionListener.cpp
+    src/infra/messaging/SocketMessageStreamer.cpp
     src/infra/messaging/TcpSocket.cpp
     src/infra/repository/SystemFileRepository.cpp
     src/server/File.cpp
@@ -24,6 +25,7 @@ set(TESTFILES
     tests/infra/messaging/ConnectionListenerTest.cpp
     tests/infra/messaging/MessageTest.cpp
     tests/infra/messaging/OpenListenerLoopTest.cpp
+    tests/infra/messaging/SocketMessageStreamerTest.cpp
     tests/infra/messaging/TcpSocketTest.cpp
     tests/infra/repository/SystemFileRepositoryTest.cpp
     tests/server/FileTest.cpp
@@ -57,6 +59,8 @@ set_target_properties(engine server client PROPERTIES
     CXX_STANDARD_REQUIRED YES
     CXX_EXTENSIONS NO
     )
+
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
 
 # add make target 'gtest'
 set(TEST_MAIN unit_tests.x)
@@ -96,3 +100,5 @@ set_source_files_properties(
     ${PROJECT_SOURCE_DIR}/external/googletest/googlemock/src/gmock_main.cc
     PROPERTIES GENERATED 1
     )
+
+endif()

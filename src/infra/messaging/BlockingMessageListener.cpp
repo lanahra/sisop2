@@ -1,26 +1,26 @@
 #include "infra/messaging/BlockingMessageListener.h"
+#include "infra/messaging/SocketException.h"
 
 #include <sstream>
 
 void BlockingMessageListener::listen() {
-    while (listenerLoop.isOpen()) {
-        int length = socket->readInt();
-        std::string serialized = socket->read(length);
-        Message message = messageFrom(serialized);
-        std::shared_ptr<MessageHandler> handler
-            = handlerFor(message.getOperation());
-        handler->handle(message.getBody(), *socket);
+    try {
+        tryToListen();
+    } catch (SocketException e) {
+        std::clog << e.what() << '\n';
+        std::clog.flush();
     }
 }
 
-Message BlockingMessageListener::messageFrom(std::string serialized) {
-    std::stringstream s(serialized);
-    Message message;
-    s >> message;
-    return message;
+void BlockingMessageListener::tryToListen() {
+    while (listenerLoop.isOpen()) {
+        Message message = messageStreamer->receive();
+        MessageHandler& handler = handlerFor(message.getOperation());
+        handler.handle(message.getBody(), *messageStreamer);
+    }
 }
 
-std::shared_ptr<MessageHandler> BlockingMessageListener::handlerFor(
+MessageHandler& BlockingMessageListener::handlerFor(
     std::string operation) {
-    return handlers.at(operation);
+    return *handlers.at(operation);
 }
