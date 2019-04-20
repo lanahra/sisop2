@@ -5,16 +5,23 @@
 #include "infra/messaging/ConnectionListener.h"
 #include "infra/messaging/AsyncMessageListenerFactory.h"
 #include "infra/messaging/MessageHandler.h"
-#include "infra/handler/EstablishSessionHandler.h"
+#include "infra/handler/ListFileEntriesHandler.h"
+#include "infra/repository/SystemFileRepository.h"
+#include "application/UserFactory.h"
+#include "application/DefaultUserService.h"
 
 int main() {
+    SystemFileRepository fileRepository;
+    UserFactory userFactory(fileRepository);
+    DefaultUserService userService(userFactory);
+
     // create handler for command.establish_session
-    std::shared_ptr<MessageHandler> establishSessionHandler
-        = std::make_shared<EstablishSessionHandler>();
+    std::shared_ptr<MessageHandler> listFileEntriesHandler 
+        = std::make_shared<ListFileEntriesHandler>(userService);
 
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
-    handlers["command.establish_session"] = establishSessionHandler;
+    handlers["file.list.request"] = listFileEntriesHandler;
 
     // factory for message listeners for every new connection
     OpenListenerLoop listenerLoop;

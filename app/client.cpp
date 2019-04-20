@@ -1,16 +1,19 @@
+#include <memory>
+#include <iostream>
+#include "infra/messaging/Socket.h"
 #include "infra/messaging/TcpSocket.h"
+#include "infra/messaging/SocketMessageStreamer.h"
+#include "infra/messaging/Message.h"
 
 int main() {
-    TcpSocket socket;
-    socket.connect("127.0.0.1", 8888);
+    auto socket = std::make_shared<TcpSocket>();
+    socket->connect("127.0.0.1", 8888);
 
-    // message serialization
-    // length of command, command, length of serialized payload, payload
-    // length of command.establish_session is 25
-    // length of 4,name is 6
-    // 4,name will be further deserialized in the handler for the command
-    std::string message("25,command.establish_session,6,4,name");
+    SocketMessageStreamer messageStreamer(socket);
 
-    socket.writeInt(message.size());
-    socket.write(message);
+    Message message("file.list.request", "sixth");
+    messageStreamer.send(message);
+
+    Message receive = messageStreamer.receive();
+    std::cout << receive.getOperation() << '\n' << receive.getBody() << '\n';
 }

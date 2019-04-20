@@ -7,7 +7,8 @@ include(Colors)
 
 
 set(SOURCES
-    src/infra/handler/EstablishSessionHandler.cpp
+    src/application/DefaultUserService.cpp
+    src/infra/handler/ListFileEntriesHandler.cpp
     src/infra/messaging/AsyncMessageListener.cpp
     src/infra/messaging/AsyncMessageListenerFactory.cpp
     src/infra/messaging/BlockingMessageListener.cpp
@@ -19,7 +20,9 @@ set(SOURCES
     src/server/User.cpp
     )
 set(TESTFILES
-    tests/infra/handler/EstablishSessionRequestTest.cpp
+    tests/application/DefaultUserServiceTest.cpp
+    tests/infra/handler/ListFileEntriesHandlerTest.cpp
+    tests/infra/handler/ListFileEntriesResponseTest.cpp
     tests/infra/messaging/AsyncMessageListenerTest.cpp
     tests/infra/messaging/BlockingMessageListenerTest.cpp
     tests/infra/messaging/ConnectionListenerTest.cpp
@@ -28,6 +31,7 @@ set(TESTFILES
     tests/infra/messaging/SocketMessageStreamerTest.cpp
     tests/infra/messaging/TcpSocketTest.cpp
     tests/infra/repository/SystemFileRepositoryTest.cpp
+    tests/server/FileEntryTest.cpp
     tests/server/FileTest.cpp
     tests/server/TimestampsTest.cpp
     tests/server/UserTest.cpp

@@ -4,29 +4,18 @@
 #include <string>
 #include <list>
 #include <stdexcept>
-#include "File.h"
-#include "Session.h"
+#include "FileRepository.h"
+#include "FileEntry.h"
 
 class User {
-    const unsigned int MAX_ESTABLISHED_SESSIONS = 2;
-
     std::string name;
-    std::list<Session> sessions;
+    FileRepository& fileRepository;
 
   public:
-    User(std::string name);
-    void establishSession(Session session);
+    User(std::string name, FileRepository& fileRepository)
+        : name(name), fileRepository(fileRepository){};
 
-    std::list<Session> getSessions() {
-        return sessions;
-    }
-};
-
-class EstablishSessionException : public std::runtime_error {
-  public:
-    EstablishSessionException(std::string name)
-        : std::runtime_error("Cannot establish new session for user: " + name) {
-    }
+    std::list<FileEntry> listEntries();
 };
 
 #endif

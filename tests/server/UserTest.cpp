@@ -1,25 +1,11 @@
 #include <gmock/gmock.h>
-#include "UserBuilder.h"
+#include "server/User.h"
+#include "MockFileRepository.h"
 
-using ::testing::Eq;
+TEST(UserTest, ListUserEntries) {
+    MockFileRepository repository;
+    EXPECT_CALL(repository, getEntries("name"));
 
-TEST(UserTest, EstablishesNewSession) {
-    User user = UserBuilder().build();
-    Session session;
-
-    user.establishSession(session);
-
-    std::list<Session> expected({session});
-    EXPECT_THAT(user.getSessions(), Eq(expected));
-}
-
-TEST(UserTest, ThrowsExceptionForTooManySessions) {
-    User user = UserBuilder().build();
-    Session firstSession, secondSession, thirdSession;
-
-    user.establishSession(firstSession);
-    user.establishSession(secondSession);
-
-    ASSERT_THROW(user.establishSession(thirdSession),
-                 EstablishSessionException);
+    User user("name", repository);
+    user.listEntries();
 }

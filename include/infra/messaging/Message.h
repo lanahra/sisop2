@@ -21,6 +21,10 @@ class Message {
         return body;
     }
 
+    friend bool operator==(const Message& self, const Message& other) {
+        return self.operation == other.operation && self.body == other.body;
+    }
+
     friend std::ostream& operator<<(std::ostream& out, const Message& self) {
         return out << self.operation.size() << ',' << self.operation << ','
             << self.body.size() << ',' << self.body;

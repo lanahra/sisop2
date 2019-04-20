@@ -1,12 +1,13 @@
 #include "infra/messaging/BlockingMessageListener.h"
 #include "infra/messaging/SocketException.h"
 
-#include <sstream>
+#include <exception>
+#include <stdexcept>
 
 void BlockingMessageListener::listen() {
     try {
         tryToListen();
-    } catch (SocketException e) {
+    } catch (const std::exception& e) {
         std::clog << e.what() << '\n';
         std::clog.flush();
     }
