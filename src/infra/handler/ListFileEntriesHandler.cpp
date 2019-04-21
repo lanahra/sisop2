@@ -3,12 +3,12 @@
 
 #include <sstream>
 
-void ListFileEntriesHandler::handle(std::string name,
+void ListFileEntriesHandler::handle(Message message,
                                     MessageStreamer& messageStreamer) {
-    std::list<FileEntry> entries = service.listFileEntries(name);
-    ListFileEntriesResponse response(entries);
+    std::list<FileEntry> entries = service.listFileEntries(message.getBody());
+    ListFileEntriesResponse fileEntries(entries);
     std::stringstream serialized;
-    serialized << response;
-    Message message("file.list.response", serialized.str());
-    messageStreamer.send(message);
+    serialized << fileEntries;
+    Message response(message.getResponse(), serialized.str());
+    messageStreamer.send(response);
 }

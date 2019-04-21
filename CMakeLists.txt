@@ -2,40 +2,45 @@ cmake_minimum_required(VERSION 3.1.3)
 
 project(SISOP2 VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "build")
 include(ConfigSafeGuards)
 include(Colors)
 
 
 set(SOURCES
-    src/application/DefaultUserService.cpp
-    src/infra/handler/ListFileEntriesHandler.cpp
-    src/infra/messaging/AsyncMessageListener.cpp
-    src/infra/messaging/AsyncMessageListenerFactory.cpp
-    src/infra/messaging/BlockingMessageListener.cpp
-    src/infra/messaging/ConnectionListener.cpp
-    src/infra/messaging/SocketMessageStreamer.cpp
-    src/infra/messaging/TcpSocket.cpp
-    src/infra/repository/SystemFileRepository.cpp
-    src/server/File.cpp
-    src/server/User.cpp
-    )
+        src/application/DefaultUserService.cpp
+        src/infra/handler/DownloadFileHandler.cpp
+        src/infra/handler/ListFileEntriesHandler.cpp
+        src/infra/messaging/AsyncMessageListener.cpp
+        src/infra/messaging/AsyncMessageListenerFactory.cpp
+        src/infra/messaging/BlockingMessageListener.cpp
+        src/infra/messaging/ConnectionListener.cpp
+        src/infra/messaging/SocketMessageStreamer.cpp
+        src/infra/messaging/TcpSocket.cpp
+        src/infra/repository/SystemFileRepository.cpp
+        src/server/File.cpp
+        src/server/User.cpp
+        )
 set(TESTFILES
-    tests/application/DefaultUserServiceTest.cpp
-    tests/infra/handler/ListFileEntriesHandlerTest.cpp
-    tests/infra/handler/ListFileEntriesResponseTest.cpp
-    tests/infra/messaging/AsyncMessageListenerTest.cpp
-    tests/infra/messaging/BlockingMessageListenerTest.cpp
-    tests/infra/messaging/ConnectionListenerTest.cpp
-    tests/infra/messaging/MessageTest.cpp
-    tests/infra/messaging/OpenListenerLoopTest.cpp
-    tests/infra/messaging/SocketMessageStreamerTest.cpp
-    tests/infra/messaging/TcpSocketTest.cpp
-    tests/infra/repository/SystemFileRepositoryTest.cpp
-    tests/server/FileEntryTest.cpp
-    tests/server/FileTest.cpp
-    tests/server/TimestampsTest.cpp
-    tests/server/UserTest.cpp
-    )
+        tests/application/DefaultUserServiceTest.cpp
+        tests/infra/handler/DownloadFileHandlerTest.cpp
+        tests/infra/handler/DownloadFileRequestTest.cpp
+        tests/infra/handler/DownloadFileResponseTest.cpp
+        tests/infra/handler/ListFileEntriesHandlerTest.cpp
+        tests/infra/handler/ListFileEntriesResponseTest.cpp
+        tests/infra/messaging/AsyncMessageListenerTest.cpp
+        tests/infra/messaging/BlockingMessageListenerTest.cpp
+        tests/infra/messaging/ConnectionListenerTest.cpp
+        tests/infra/messaging/MessageTest.cpp
+        tests/infra/messaging/OpenListenerLoopTest.cpp
+        tests/infra/messaging/SocketMessageStreamerTest.cpp
+        tests/infra/messaging/TcpSocketTest.cpp
+        tests/infra/repository/SystemFileRepositoryTest.cpp
+        tests/server/FileEntryTest.cpp
+        tests/server/FileTest.cpp
+        tests/server/TimestampsTest.cpp
+        tests/server/UserTest.cpp
+        )
 
 add_library(engine ${SOURCES})
 

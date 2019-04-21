@@ -2,12 +2,14 @@
 #define USER_SERVICE_H
 
 #include <list>
+#include "server/File.h"
 #include "server/FileEntry.h"
 
 class UserService {
   public:
     virtual ~UserService() = default;
-    virtual std::list<FileEntry> listFileEntries(std::string name) = 0;
+    virtual File getFile(std::string username, std::string filename) = 0;
+    virtual std::list<FileEntry> listFileEntries(std::string username) = 0;
 };
 
 #endif

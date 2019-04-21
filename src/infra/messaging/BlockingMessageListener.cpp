@@ -17,7 +17,7 @@ void BlockingMessageListener::tryToListen() {
     while (listenerLoop.isOpen()) {
         Message message = messageStreamer->receive();
         MessageHandler& handler = handlerFor(message.getOperation());
-        handler.handle(message.getBody(), *messageStreamer);
+        handler.handle(message, *messageStreamer);
     }
 }
 

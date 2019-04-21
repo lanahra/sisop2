@@ -15,6 +15,7 @@ class User {
     User(std::string name, FileRepository& fileRepository)
         : name(name), fileRepository(fileRepository){};
 
+    File getFile(std::string filename);
     std::list<FileEntry> listEntries();
 };
 

@@ -11,8 +11,9 @@ TEST(SocketMessageStreamerTest, ReceivesMessage) {
     std::shared_ptr<MockSocket> socket = std::make_shared<MockSocket>();
     {
         InSequence s;
-        EXPECT_CALL(*socket, readInt()).WillOnce(Return(18));
-        EXPECT_CALL(*socket, read(18)).WillOnce(Return("9,operation,4,8888"));
+        EXPECT_CALL(*socket, readInt()).WillOnce(Return(21));
+        EXPECT_CALL(*socket, read(21))
+            .WillOnce(Return("9,operation,4,8888,0,"));
     }
 
     SocketMessageStreamer messageStreamer(socket);
@@ -26,9 +27,9 @@ TEST(SocketMessageStreamerTest, SendsMessage) {
     std::shared_ptr<MockSocket> socket = std::make_shared<MockSocket>();
     {
         InSequence s;
-        EXPECT_CALL(*socket, writeInt(18));
+        EXPECT_CALL(*socket, writeInt(21));
 
-        std::string body("9,operation,4,8888");
+        std::string body("9,operation,4,8888,0,");
         EXPECT_CALL(*socket, write(body));
     }
 

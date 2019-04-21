@@ -9,7 +9,7 @@ class ListFileEntriesHandler : public MessageHandler {
 
   public:
     ListFileEntriesHandler(UserService& service) : service(service){};
-    void handle(std::string name, MessageStreamer& messageStreamer) override;
+    void handle(Message message, MessageStreamer& messageStreamer) override;
 };
 
 #endif

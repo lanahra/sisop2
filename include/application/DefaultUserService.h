@@ -9,7 +9,8 @@ class DefaultUserService : public UserService {
 
   public:
     DefaultUserService(UserFactory& userFactory) : userFactory(userFactory){};
-    std::list<FileEntry> listFileEntries(std::string name) override;
+    File getFile(std::string username, std::string filename) override;
+    std::list<FileEntry> listFileEntries(std::string username) override;
 };
 
 #endif

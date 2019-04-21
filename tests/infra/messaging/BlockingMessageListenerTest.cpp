@@ -28,7 +28,7 @@ TEST(BlockingMessageListenerTest, ReadsMessageFromSocket) {
 
     std::shared_ptr<MockMessageHandler> handler
         = std::make_shared<MockMessageHandler>();
-    EXPECT_CALL(*handler, handle("8888", Ref(*messageStreamer)));
+    EXPECT_CALL(*handler, handle(message, Ref(*messageStreamer)));
 
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
     handlers["operation"] = handler;

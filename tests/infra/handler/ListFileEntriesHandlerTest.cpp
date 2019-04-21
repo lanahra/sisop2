@@ -12,11 +12,13 @@ TEST(ListFileEntriesHandlerTest, ListUserFileEntries) {
         .WillOnce(Return(std::list<FileEntry>{
             FileEntry("first", timestamps), FileEntry("second", timestamps)}));
 
+
     MockMessageStreamer messageStreamer;
-    Message message("file.list.response",
+    Message response("file.list.response",
                     "2,5,first,10,20,30,6,second,10,20,30");
-    EXPECT_CALL(messageStreamer, send(message));
+    EXPECT_CALL(messageStreamer, send(response));
 
     ListFileEntriesHandler handler(service);
-    handler.handle("name", messageStreamer);
+    Message message("file.list.request", "name", "file.list.response");
+    handler.handle(message, messageStreamer);
 }
