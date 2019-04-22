@@ -7,3 +7,7 @@ File User::getFile(std::string filename) {
 std::list<FileEntry> User::listEntries() {
     return fileRepository.getEntries(name);
 }
+
+void User::removeFile(std::string filename) {
+    fileRepository.remove(name, filename);
+}

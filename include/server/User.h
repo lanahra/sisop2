@@ -17,6 +17,7 @@ class User {
 
     File getFile(std::string filename);
     std::list<FileEntry> listEntries();
+    void removeFile(std::string filename);
 };
 
 #endif

@@ -20,7 +20,7 @@ set(SOURCES
         src/infra/repository/SystemFileRepository.cpp
         src/server/File.cpp
         src/server/User.cpp
-        )
+        src/server/SystemClock.cpp)
 set(TESTFILES
         tests/application/DefaultUserServiceTest.cpp
         tests/infra/handler/DownloadFileHandlerTest.cpp
@@ -38,6 +38,7 @@ set(TESTFILES
         tests/infra/repository/SystemFileRepositoryTest.cpp
         tests/server/FileEntryTest.cpp
         tests/server/FileTest.cpp
+        tests/server/RemovedEntryTest.cpp
         tests/server/TimestampsTest.cpp
         tests/server/UserTest.cpp
         )

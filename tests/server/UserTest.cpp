@@ -17,3 +17,11 @@ TEST(UserTest, ListsUserEntries) {
     User user("name", repository);
     user.listEntries();
 }
+
+TEST(UserTest, RemovesUserFile) {
+    MockFileRepository repository;
+    EXPECT_CALL(repository, remove("name", "file"));
+
+    User user("name", repository);
+    user.removeFile("file");
+}

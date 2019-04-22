@@ -1,4 +1,5 @@
 #include <infra/handler/DownloadFileHandler.h>
+#include <server/SystemClock.h>
 #include <map>
 #include <memory>
 #include "application/DefaultUserService.h"
@@ -12,7 +13,8 @@
 #include "infra/repository/SystemFileRepository.h"
 
 int main() {
-    SystemFileRepository fileRepository;
+    SystemClock clock;
+    SystemFileRepository fileRepository(clock);
     UserFactory userFactory(fileRepository);
     DefaultUserService userService(userFactory);
 

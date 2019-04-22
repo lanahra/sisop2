@@ -1,10 +1,11 @@
 #include "infra/repository/SystemFileRepository.h"
-#include "infra/repository/FileNotFoundException.h"
 
+#include <dirent.h>
 #include <sys/stat.h>
 #include <fstream>
 #include <streambuf>
-#include <dirent.h>
+#include "infra/repository/FileNotFoundException.h"
+#include "server/RemovedEntry.h"
 
 void SystemFileRepository::save(std::string dir, File file) {
     std::string syncDir(PREFIX + dir);
@@ -15,14 +16,14 @@ void SystemFileRepository::save(std::string dir, File file) {
 }
 
 void SystemFileRepository::makeDirIfNotExist(std::string dir) {
-    if (!dirExists(dir)) {
+    if (!fileExists(dir)) {
         makeDir(dir);
     }
 }
 
-bool SystemFileRepository::dirExists(std::string dir) {
+bool SystemFileRepository::fileExists(std::string path) {
     struct stat st;
-    return stat(dir.c_str(), &st) == 0;
+    return stat(path.c_str(), &st) == 0;
 }
 
 void SystemFileRepository::makeDir(std::string dir) {
@@ -32,8 +33,7 @@ void SystemFileRepository::makeDir(std::string dir) {
 File SystemFileRepository::get(std::string dir, std::string filename) {
     std::string path(PREFIX + dir + '/' + filename);
 
-    struct stat st;
-    if (stat(path.c_str(), &st) == 0) {
+    if (fileExists(path)) {
         return File(filename, timestampsFrom(path), bodyFrom(path));
     } else {
         throw FileNotFoundException(path);
@@ -56,7 +56,7 @@ std::string SystemFileRepository::bodyFrom(std::string path) {
 
 std::list<FileEntry> SystemFileRepository::getEntries(std::string dir) {
     std::string syncDir(PREFIX + dir);
-    if (dirExists(syncDir)) {
+    if (fileExists(syncDir)) {
         return readDirEntries(syncDir);
     } else {
         return {};
@@ -78,4 +78,21 @@ std::list<FileEntry> SystemFileRepository::readDirEntries(std::string dir) {
 
     closedir(openDir);
     return entries;
+}
+
+void SystemFileRepository::remove(std::string dir, std::string filename) {
+    std::string path(PREFIX + dir + '/' + filename);
+    if (fileExists(path)) {
+        std::remove(path.c_str());
+        recordRemovedEntry(dir, filename);
+    } else {
+        throw FileNotFoundException(path);
+    }
+}
+void SystemFileRepository::recordRemovedEntry(std::string dir,
+                                              std::string filename) {
+    RemovedEntry entry(filename, clock.now());
+    std::ofstream fileStream(PREFIX + dir + '/' + DELETED, std::ios_base::app);
+    fileStream << entry << std::endl;
+    fileStream.close();
 }
