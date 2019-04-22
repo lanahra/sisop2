@@ -1,17 +1,17 @@
-#ifndef DOWNLOAD_FILE_REQUEST_H
-#define DOWNLOAD_FILE_REQUEST_H
+#ifndef REMOVE_FILE_REQUEST_H
+#define REMOVE_FILE_REQUEST_H
 
 #include <string>
 #include <iostream>
 
-class DownloadFileRequest {
+class RemoveFileRequest {
     std::string username;
     std::string filename;
 
   public:
-    DownloadFileRequest() = default;
-    DownloadFileRequest(std::string username, std::string filename)
-        : username(username), filename(filename){};
+    RemoveFileRequest() = default;
+    RemoveFileRequest(std::string username, std::string filename)
+    : username(username), filename(filename){};
 
     std::string getUsername() {
         return username;
@@ -21,20 +21,20 @@ class DownloadFileRequest {
         return filename;
     }
 
-    friend bool operator==(const DownloadFileRequest& self,
-                           const DownloadFileRequest& other) {
+    friend bool operator==(const RemoveFileRequest& self,
+                           const RemoveFileRequest& other) {
         return self.username == other.username
-            && self.filename == other.filename;
+               && self.filename == other.filename;
     }
 
     friend std::ostream& operator<<(std::ostream& out,
-                                    const DownloadFileRequest& self) {
+                                    const RemoveFileRequest& self) {
         return out << self.username.size() << ',' << self.username << ','
                    << self.filename.size() << ',' << self.filename;
     }
 
     friend std::istream& operator>>(std::istream& in,
-                                    DownloadFileRequest& self) {
+                                    RemoveFileRequest& self) {
         size_t size;
         in >> size;
         in.ignore(1, ',');

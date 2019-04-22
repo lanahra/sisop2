@@ -7,6 +7,7 @@ class MockUserService : public UserService {
   public:
     MOCK_METHOD2(getFile, File(std::string, std::string));
     MOCK_METHOD1(listFileEntries, std::list<FileEntry>(std::string));
+    MOCK_METHOD2(removeFile, void(std::string, std::string));
 };
 
 #endif
