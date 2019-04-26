@@ -10,10 +10,12 @@ include(Colors)
 set(SOURCES
         src/application/DefaultUserService.cpp
         src/infra/handler/DownloadFileHandler.cpp
+        src/infra/handler/ExitCommandHandler.cpp
         src/infra/handler/ListFileEntriesHandler.cpp
         src/infra/handler/RemoveFileHandler.cpp
         src/infra/messaging/AsyncMessageListener.cpp
         src/infra/messaging/AsyncMessageListenerFactory.cpp
+        src/infra/messaging/BlockingCommandListener.cpp
         src/infra/messaging/BlockingMessageListener.cpp
         src/infra/messaging/ConnectionListener.cpp
         src/infra/messaging/SocketMessageStreamer.cpp
@@ -25,9 +27,11 @@ set(SOURCES
         )
 set(TESTFILES
         tests/application/DefaultUserServiceTest.cpp
+        tests/infra/messaging/BlockingCommandListenerTest.cpp
         tests/infra/handler/DownloadFileHandlerTest.cpp
         tests/infra/handler/DownloadFileRequestTest.cpp
         tests/infra/handler/DownloadFileResponseTest.cpp
+        tests/infra/handler/ExitCommandHandlerTest.cpp
         tests/infra/handler/ListFileEntriesHandlerTest.cpp
         tests/infra/handler/ListFileEntriesResponseTest.cpp
         tests/infra/handler/RemoveFileRequestTest.cpp

@@ -37,3 +37,11 @@ TEST(SocketMessageStreamerTest, SendsMessage) {
     SocketMessageStreamer messageStreamer(socket);
     messageStreamer.send(message);
 }
+
+TEST(SocketMessageStreamerTest, ClosesStreamer) {
+    std::shared_ptr<MockSocket> socket = std::make_shared<MockSocket>();
+    EXPECT_CALL(*socket, close());
+
+    SocketMessageStreamer messageStreamer(socket);
+    messageStreamer.close();
+}

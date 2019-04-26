@@ -1,6 +1,13 @@
 #include <iostream>
+#include <iterator>
 #include <memory>
+#include <sstream>
+#include <vector>
+#include "infra/handler/ExitCommandHandler.h"
+#include "infra/messaging/AsyncMessageListener.h"
+#include "infra/messaging/BlockingCommandListener.h"
 #include "infra/messaging/Message.h"
+#include "infra/messaging/OpenListenerLoop.h"
 #include "infra/messaging/Socket.h"
 #include "infra/messaging/SocketMessageStreamer.h"
 #include "infra/messaging/TcpSocket.h"
@@ -9,19 +16,16 @@ int main() {
     auto socket = std::make_shared<TcpSocket>();
     socket->connect("127.0.0.1", 8888);
 
-    SocketMessageStreamer messageStreamer(socket);
+    auto messageStreamer = std::make_shared<SocketMessageStreamer>(socket);
 
-    Message message("file.list.request", "sixth", "file.list.response");
-    messageStreamer.send(message);
+    auto exitHandler = std::make_shared<ExitCommandHandler>();
 
-    Message receive = messageStreamer.receive();
-    std::cout << receive.getOperation() << '\n' << receive.getBody() << '\n';
+    std::map<std::string, std::shared_ptr<CommandHandler>> commandHandlers;
+    commandHandlers["exit"] = exitHandler;
 
-    Message downloadRequest(
-        "file.download.request", "5,sixth,5,first", "file.download.response");
-    messageStreamer.send(downloadRequest);
+    OpenListenerLoop listenerLoop;
+    BlockingCommandListener commandListener(
+        std::cin, listenerLoop, messageStreamer, commandHandlers);
 
-    Message downloadResponse = messageStreamer.receive();
-    std::cout << downloadResponse.getOperation() << '\n'
-              << downloadResponse.getBody() << '\n';
+    commandListener.listen();
 }

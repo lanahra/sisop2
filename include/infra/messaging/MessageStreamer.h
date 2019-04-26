@@ -8,6 +8,7 @@ class MessageStreamer {
     virtual ~MessageStreamer() = default;
     virtual Message receive() = 0;
     virtual void send(Message message) = 0;
+    virtual void close() = 0;
 };
 
 #endif

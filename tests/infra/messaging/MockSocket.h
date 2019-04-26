@@ -13,6 +13,7 @@ class MockSocket : public Socket {
     MOCK_METHOD1(read, std::string(int));
     MOCK_METHOD1(writeInt, void(int));
     MOCK_METHOD1(write, void(std::string));
+    MOCK_METHOD0(close, void());
 };
 
 #endif

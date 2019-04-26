@@ -1,9 +1,9 @@
 #include "infra/messaging/TcpSocket.h"
 #include "infra/messaging/SocketException.h"
 
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #include <unistd.h>
 #include <cerrno>
 #include <cstring>
@@ -15,7 +15,7 @@ TcpSocket::TcpSocket() {
 TcpSocket::TcpSocket(int socket_) : socket_(socket_){};
 
 TcpSocket::~TcpSocket() {
-    ::close(socket_);
+    close();
 }
 
 void TcpSocket::listen(int port) {
@@ -39,7 +39,9 @@ std::shared_ptr<Socket> TcpSocket::accept() {
 
 void TcpSocket::connect(std::string host, int port) {
     struct sockaddr_in address = addressFrom(host, port);
-    ::connect(socket_, (struct sockaddr*)&address, sizeof(address));
+    if (::connect(socket_, (struct sockaddr*)&address, sizeof(address)) != 0) {
+        throw SocketException(std::strerror(errno));
+    }
 }
 
 struct sockaddr_in TcpSocket::addressFrom(std::string host, int port) {
@@ -95,4 +97,8 @@ void TcpSocket::write(void* buffer, int length) {
         }
         totalWritten += bytesWritten;
     }
+}
+
+void TcpSocket::close() {
+    ::close(socket_);
 }

@@ -14,6 +14,7 @@ class Socket {
     virtual std::string read(int length) = 0;
     virtual void writeInt(int n) = 0;
     virtual void write(std::string s) = 0;
+    virtual void close() = 0;
 };
 
 #endif

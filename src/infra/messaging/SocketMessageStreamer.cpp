@@ -26,3 +26,7 @@ std::string SocketMessageStreamer::serializedFrom(Message message) {
     serialized << message;
     return serialized.str();
 }
+
+void SocketMessageStreamer::close() {
+    socket->close();
+}

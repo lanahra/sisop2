@@ -4,6 +4,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "infra/messaging/TcpSocket.h"
+#include "infra/messaging/SocketException.h"
 
 using ::testing::Eq;
 
@@ -90,4 +91,9 @@ TEST(TcpSocketTest, WritesAndReadsString) {
     client.write("a string");
 
     t.join();
+}
+
+TEST(TcpSocketTest, ThrowsExceptionOnConnectError) {
+    TcpSocket client;
+    EXPECT_THROW(client.connect("invalid host", 1234), SocketException);
 }

@@ -8,7 +8,7 @@ void BlockingMessageListener::listen() {
     try {
         tryToListen();
     } catch (const std::exception& e) {
-        std::clog << e.what() << '\n';
+        std::clog << e.what() << std::endl;
         std::clog.flush();
     }
 }
@@ -21,7 +21,6 @@ void BlockingMessageListener::tryToListen() {
     }
 }
 
-MessageHandler& BlockingMessageListener::handlerFor(
-    std::string operation) {
+MessageHandler& BlockingMessageListener::handlerFor(std::string operation) {
     return *handlers.at(operation);
 }

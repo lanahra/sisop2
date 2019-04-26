@@ -37,7 +37,7 @@ TEST(BlockingMessageListenerTest, ReadsMessageFromSocket) {
     listener.listen();
 }
 
-TEST(BlockingMessageListenerTest, CatchesSocketException) {
+TEST(BlockingMessageListenerTest, CatchesException) {
     std::shared_ptr<MockMessageStreamer> messageStreamer
         = std::make_shared<MockMessageStreamer>();
     EXPECT_CALL(*messageStreamer, receive())
@@ -51,7 +51,7 @@ TEST(BlockingMessageListenerTest, CatchesSocketException) {
 
     try {
         listener.listen();
-    } catch (SocketException e) {
+    } catch (const std::exception& e) {
         FAIL();
     }
 }

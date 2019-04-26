@@ -9,6 +9,7 @@ class MockMessageStreamer : public MessageStreamer {
   public:
     MOCK_METHOD0(receive, Message());
     MOCK_METHOD1(send, void(Message));
+    MOCK_METHOD0(close, void());
 };
 
 #endif

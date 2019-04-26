@@ -16,6 +16,7 @@ class SocketMessageStreamer : public MessageStreamer {
     SocketMessageStreamer(std::shared_ptr<Socket> socket) : socket(socket){};
     Message receive();
     void send(Message message);
+    void close() override;
 };
 
 #endif

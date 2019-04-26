@@ -27,6 +27,7 @@ class TcpSocket : public Socket {
     std::string read(int length) override;
     void writeInt(int n) override;
     void write(std::string s) override;
+    void close() override;
 };
 
 #endif
