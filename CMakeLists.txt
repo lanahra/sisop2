@@ -14,6 +14,7 @@ set(SOURCES
         src/infra/handler/ListFileEntriesHandler.cpp
         src/infra/handler/ListServerEntriesCommandHandler.cpp
         src/infra/handler/ListServerEntriesResponseHandler.cpp
+        src/infra/handler/RemoveFileCommandHandler.cpp
         src/infra/handler/RemoveFileHandler.cpp
         src/infra/messaging/AsyncMessageListener.cpp
         src/infra/messaging/AsyncMessageListenerFactory.cpp
@@ -40,6 +41,7 @@ set(TESTFILES
         tests/infra/handler/ListServerEntriesResponseHandlerTest.cpp
         tests/infra/handler/RemoveFileRequestTest.cpp
         tests/infra/handler/RemoveFileHandlerTest.cpp
+        tests/infra/handler/RemoveFileCommandHandlerTest.cpp
         tests/infra/messaging/AsyncMessageListenerTest.cpp
         tests/infra/messaging/BlockingMessageListenerTest.cpp
         tests/infra/messaging/ConnectionListenerTest.cpp

@@ -1,5 +1,3 @@
-#include <infra/handler/ListServerEntriesResponseHandler.h>
-#include <infra/messaging/BlockingMessageListener.h>
 #include <iostream>
 #include <iterator>
 #include <memory>
@@ -8,8 +6,10 @@
 #include "infra/handler/ExitCommandHandler.h"
 #include "infra/handler/ListServerEntriesCommandHandler.h"
 #include "infra/handler/ListServerEntriesResponseHandler.h"
+#include "infra/handler/RemoveFileCommandHandler.h"
 #include "infra/messaging/AsyncMessageListener.h"
 #include "infra/messaging/BlockingCommandListener.h"
+#include "infra/messaging/BlockingMessageListener.h"
 #include "infra/messaging/Message.h"
 #include "infra/messaging/OpenListenerLoop.h"
 #include "infra/messaging/Socket.h"
@@ -41,10 +41,14 @@ int main() {
     auto listServerCommandHandler
         = std::make_shared<ListServerEntriesCommandHandler>(
             "sixth", "file.list.request", "file.list.response");
+    auto removeFileCommandHandler = std::make_shared<RemoveFileCommandHandler>(
+        "sixth", "file.remove.request", std::cout);
 
     std::map<std::string, std::shared_ptr<CommandHandler>> commandHandlers;
     commandHandlers["exit"] = exitCommandHandler;
     commandHandlers["list_server"] = listServerCommandHandler;
+    commandHandlers["delete"] = removeFileCommandHandler;
+
 
     BlockingCommandListener commandListener(
         std::cin, listenerLoop, messageStreamer, commandHandlers);

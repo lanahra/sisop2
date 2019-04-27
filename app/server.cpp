@@ -1,10 +1,11 @@
-#include <infra/handler/DownloadFileHandler.h>
 #include <server/SystemClock.h>
 #include <map>
 #include <memory>
 #include "application/DefaultUserService.h"
 #include "application/UserFactory.h"
+#include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
+#include "infra/handler/RemoveFileHandler.h"
 #include "infra/messaging/AsyncMessageListenerFactory.h"
 #include "infra/messaging/ConnectionListener.h"
 #include "infra/messaging/MessageHandler.h"
@@ -19,16 +20,19 @@ int main() {
     DefaultUserService userService(userFactory);
 
     // create handler for command.establish_session
-    std::shared_ptr<MessageHandler> listFileEntriesHandler 
+    auto listFileEntriesHandler
         = std::make_shared<ListFileEntriesHandler>(userService);
 
-    std::shared_ptr<MessageHandler> downloadFileHandler
+    auto downloadFileHandler
         = std::make_shared<DownloadFileHandler>(userService);
+
+    auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService);
 
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
     handlers["file.list.request"] = listFileEntriesHandler;
     handlers["file.download.request"] = downloadFileHandler;
+    handlers["file.remove.request"] = removeFileHandler;
 
     // factory for message listeners for every new connection
     OpenListenerLoop listenerLoop;
