@@ -6,14 +6,17 @@
 
 class DefaultUserService : public UserService {
     UserFactory& userFactory;
+    FileRepository& repository;
 
     void tryToRemoveFile(std::string username, std::string filename);
 
   public:
-    DefaultUserService(UserFactory& userFactory) : userFactory(userFactory){};
+    DefaultUserService(UserFactory& userFactory, FileRepository& repository)
+        : userFactory(userFactory), repository(repository){};
     File getFile(std::string username, std::string filename) override;
     std::list<FileEntry> listFileEntries(std::string username) override;
     void removeFile(std::string username, std::string filename) override;
+    void saveLocal(File file) override;
 };
 
 #endif

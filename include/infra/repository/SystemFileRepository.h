@@ -24,6 +24,7 @@ class SystemFileRepository : public FileRepository {
   public:
     SystemFileRepository(Clock& clock) : clock(clock){};
     void save(std::string dir, File file);
+    void saveLocal(File file);
     File get(std::string dir, std::string filename);
     std::list<FileEntry> getEntries(std::string dir);
     void remove(std::string dir, std::string filename) override;

@@ -17,7 +17,7 @@ int main() {
     SystemClock clock;
     SystemFileRepository fileRepository(clock);
     UserFactory userFactory(fileRepository);
-    DefaultUserService userService(userFactory);
+    DefaultUserService userService(userFactory, fileRepository);
 
     // create handler for command.establish_session
     auto listFileEntriesHandler

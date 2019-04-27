@@ -48,6 +48,18 @@ TEST(SystemFileRepositoryTest, OverwritesExistingFile) {
     EXPECT_THAT(stat("sync_dir_third/existing_file", &st), Eq(0));
 }
 
+TEST(SystemFileRepositoryTest, SavesFileLocally) {
+    system("rm -fr afile");
+    File file("afile", Timestamps(0, 0, 0), "file body");
+
+    SystemClock clock;
+    SystemFileRepository repository(clock);
+    repository.saveLocal(file);
+
+    struct stat st;
+    EXPECT_THAT(stat("afile", &st), Eq(0));
+}
+
 TEST(SystemFileRepositoryTest, GetsFileFromFileSystem) {
     system("mkdir -p sync_dir_fourth");
     system("touch sync_dir_fourth/content");

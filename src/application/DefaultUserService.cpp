@@ -27,3 +27,7 @@ void DefaultUserService::tryToRemoveFile(std::string username,
     User user = userFactory.createUser(username);
     user.removeFile(filename);
 }
+
+void DefaultUserService::saveLocal(File file) {
+    repository.saveLocal(file);
+}

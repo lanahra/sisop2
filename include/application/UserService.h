@@ -11,6 +11,7 @@ class UserService {
     virtual File getFile(std::string username, std::string filename) = 0;
     virtual std::list<FileEntry> listFileEntries(std::string username) = 0;
     virtual void removeFile(std::string username, std::string filename) = 0;
+    virtual void saveLocal(File file) = 0;
 };
 
 #endif

@@ -30,6 +30,12 @@ void SystemFileRepository::makeDir(std::string dir) {
     mkdir(dir.c_str(), PERMISSION_MODE);
 }
 
+void SystemFileRepository::saveLocal(File file) {
+    std::ofstream fileStream(file.getName());
+    fileStream << file.getBody();
+    fileStream.close();
+}
+
 File SystemFileRepository::get(std::string dir, std::string filename) {
     std::string path(PREFIX + dir + '/' + filename);
 
