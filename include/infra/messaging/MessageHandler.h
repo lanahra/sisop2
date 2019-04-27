@@ -7,7 +7,7 @@
 class MessageHandler {
   public:
     virtual ~MessageHandler() = default;
-    virtual void handle(Message message, MessageStreamer& socket) = 0;
+    virtual void handle(Message message, MessageStreamer& messageStreamer) = 0;
 };
 
 #endif

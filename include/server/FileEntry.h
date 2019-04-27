@@ -17,6 +17,10 @@ class FileEntry {
         return name;
     }
 
+    Timestamps getTimestamps() const {
+        return timestamps;
+    }
+
     friend bool operator==(const FileEntry& self, const FileEntry& other) {
         return self.name == other.name && self.timestamps == other.timestamps;
     }

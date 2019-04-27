@@ -12,6 +12,8 @@ set(SOURCES
         src/infra/handler/DownloadFileHandler.cpp
         src/infra/handler/ExitCommandHandler.cpp
         src/infra/handler/ListFileEntriesHandler.cpp
+        src/infra/handler/ListServerEntriesCommandHandler.cpp
+        src/infra/handler/ListServerEntriesResponseHandler.cpp
         src/infra/handler/RemoveFileHandler.cpp
         src/infra/messaging/AsyncMessageListener.cpp
         src/infra/messaging/AsyncMessageListenerFactory.cpp
@@ -34,6 +36,8 @@ set(TESTFILES
         tests/infra/handler/ExitCommandHandlerTest.cpp
         tests/infra/handler/ListFileEntriesHandlerTest.cpp
         tests/infra/handler/ListFileEntriesResponseTest.cpp
+        tests/infra/handler/ListServerEntriesCommandHandlerTest.cpp
+        tests/infra/handler/ListServerEntriesResponseHandlerTest.cpp
         tests/infra/handler/RemoveFileRequestTest.cpp
         tests/infra/handler/RemoveFileHandlerTest.cpp
         tests/infra/messaging/AsyncMessageListenerTest.cpp
