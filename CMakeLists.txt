@@ -9,9 +9,11 @@ include(Colors)
 
 set(SOURCES
         src/application/DefaultUserService.cpp
+        src/application/DefaultPrinterService.cpp
         src/infra/handler/DownloadFileHandler.cpp
         src/infra/handler/ExitCommandHandler.cpp
         src/infra/handler/ListFileEntriesHandler.cpp
+        src/infra/handler/ListClientEntriesCommandHandler.cpp
         src/infra/handler/ListServerEntriesCommandHandler.cpp
         src/infra/handler/ListServerEntriesResponseHandler.cpp
         src/infra/handler/RemoveFileCommandHandler.cpp
@@ -30,6 +32,7 @@ set(SOURCES
         )
 set(TESTFILES
         tests/application/DefaultUserServiceTest.cpp
+        tests/application/DefaultPrinterServiceTest.cpp
         tests/infra/messaging/BlockingCommandListenerTest.cpp
         tests/infra/handler/DownloadFileHandlerTest.cpp
         tests/infra/handler/DownloadFileRequestTest.cpp
@@ -37,6 +40,7 @@ set(TESTFILES
         tests/infra/handler/ExitCommandHandlerTest.cpp
         tests/infra/handler/ListFileEntriesHandlerTest.cpp
         tests/infra/handler/ListFileEntriesResponseTest.cpp
+        tests/infra/handler/ListClientEntriesCommandHandlerTest.cpp
         tests/infra/handler/ListServerEntriesCommandHandlerTest.cpp
         tests/infra/handler/ListServerEntriesResponseHandlerTest.cpp
         tests/infra/handler/RemoveFileRequestTest.cpp

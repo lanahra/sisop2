@@ -1,8 +1,10 @@
 #include "infra/handler/RemoveFileHandler.h"
-#include "infra/handler/RemoveFileRequest.h"
 #include <sstream>
+#include <tuple>
+#include "infra/handler/RemoveFileRequest.h"
 
 void RemoveFileHandler::handle(Message message, MessageStreamer& socket) {
+    std::ignore = socket;
     std::stringstream serialized(message.getBody());
     RemoveFileRequest request;
     serialized >> request;

@@ -3,18 +3,17 @@
 
 #include <ostream>
 #include "ListFileEntriesResponse.h"
+#include "application/PrinterService.h"
 #include "infra/messaging/MessageHandler.h"
 
 class ListServerEntriesResponseHandler : public MessageHandler {
-    std::ostream& output;
+    PrinterService& service;
 
     ListFileEntriesResponse deserializeMessage(std::string body);
-    void printHeader();
-    void printEntries(std::list<FileEntry> list);
-    std::string formatTimestamp(time_t time);
 
   public:
-    ListServerEntriesResponseHandler(std::ostream& output) : output(output){};
+    ListServerEntriesResponseHandler(PrinterService& service)
+        : service(service){};
     void handle(Message message, MessageStreamer& messageStreamer) override;
 };
 

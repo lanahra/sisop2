@@ -9,10 +9,9 @@
 void ListServerEntriesResponseHandler::handle(
     Message message,
     MessageStreamer& messageStreamer) {
+    std::ignore = messageStreamer;
     ListFileEntriesResponse response = deserializeMessage(message.getBody());
-    printHeader();
-    printEntries(response.getEntries());
-    output.flush();
+    service.printEntries(response.getEntries());
 }
 
 ListFileEntriesResponse ListServerEntriesResponseHandler::deserializeMessage(
@@ -21,30 +20,4 @@ ListFileEntriesResponse ListServerEntriesResponseHandler::deserializeMessage(
     ListFileEntriesResponse response;
     serialized >> response;
     return response;
-}
-
-void ListServerEntriesResponseHandler::printHeader() {
-    output << std::left << std::setw(24) << "last modified" << std::setw(24)
-           << "last accessed" << std::setw(24) << "last changed"
-           << "file" << std::endl;
-}
-
-void ListServerEntriesResponseHandler::printEntries(
-    std::list<FileEntry> entries) {
-    for (FileEntry entry : entries) {
-        output << std::setw(24)
-               << formatTimestamp(entry.getTimestamps().getLastModification())
-               << std::setw(24)
-               << formatTimestamp(entry.getTimestamps().getLastAccess())
-               << std::setw(24)
-               << formatTimestamp(entry.getTimestamps().getLastChange())
-               << entry.getName() << std::endl;
-    }
-}
-
-std::string ListServerEntriesResponseHandler::formatTimestamp(
-    std::time_t time) {
-    std::stringstream format;
-    format << std::put_time(localtime(&time), "%Y-%m-%d %X");
-    return format.str();
 }
