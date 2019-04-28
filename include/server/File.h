@@ -17,6 +17,7 @@ class File {
     File(std::string name, Timestamps timestamps, std::string body);
 
     std::string getName();
+    Timestamps getTimestamps();
     std::string getBody();
 
     friend bool operator==(const File& self, const File& other) {

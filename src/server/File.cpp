@@ -8,6 +8,10 @@ std::string File::getName() {
     return name;
 }
 
+Timestamps File::getTimestamps() {
+    return timestamps;
+}
+
 std::string File::getBody() {
     return body;
 }

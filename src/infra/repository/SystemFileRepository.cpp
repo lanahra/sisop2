@@ -2,6 +2,7 @@
 
 #include <dirent.h>
 #include <sys/stat.h>
+#include <utime.h>
 #include <fstream>
 #include <streambuf>
 #include "infra/repository/FileNotFoundException.h"
@@ -10,9 +11,11 @@
 void SystemFileRepository::save(std::string dir, File file) {
     std::string syncDir(PREFIX + dir);
     makeDirIfNotExist(syncDir);
-    std::ofstream fileStream(syncDir + '/' + file.getName());
+    std::string path(syncDir + '/' + file.getName());
+    std::ofstream fileStream(path);
     fileStream << file.getBody();
     fileStream.close();
+    saveTimestamps(path, file.getTimestamps());
 }
 
 void SystemFileRepository::makeDirIfNotExist(std::string dir) {
@@ -28,6 +31,13 @@ bool SystemFileRepository::fileExists(std::string path) {
 
 void SystemFileRepository::makeDir(std::string dir) {
     mkdir(dir.c_str(), PERMISSION_MODE);
+}
+
+void SystemFileRepository::saveTimestamps(std::string path,
+                                          Timestamps timestamps) {
+    struct utimbuf times
+        = {timestamps.getLastAccess(), timestamps.getLastModification()};
+    utime(path.c_str(), &times);
 }
 
 void SystemFileRepository::saveLocal(File file) {
@@ -85,7 +95,6 @@ std::list<FileEntry> SystemFileRepository::readDirEntries(std::string dir) {
     closedir(openDir);
     return entries;
 }
-
 void SystemFileRepository::remove(std::string dir, std::string filename) {
     std::string path(PREFIX + dir + '/' + filename);
     if (fileExists(path)) {

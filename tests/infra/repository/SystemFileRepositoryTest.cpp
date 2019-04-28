@@ -13,7 +13,7 @@ using ::testing::UnorderedElementsAre;
 
 TEST(SystemFileRepositoryTest, SavesFile) {
     system("mkdir -p sync_dir_first");
-    File file("afile", Timestamps(0, 0, 0), "file body");
+    File file("afile", Timestamps(10, 20, 0), "file body");
 
     SystemClock clock;
     SystemFileRepository repository(clock);
@@ -21,6 +21,9 @@ TEST(SystemFileRepositoryTest, SavesFile) {
 
     struct stat st;
     EXPECT_THAT(stat("sync_dir_first/afile", &st), Eq(0));
+    EXPECT_THAT(st.st_atim.tv_sec, Eq(file.getTimestamps().getLastAccess()));
+    EXPECT_THAT(st.st_mtim.tv_sec,
+                Eq(file.getTimestamps().getLastModification()));
 }
 
 TEST(SystemFileRepositoryTest, MakesDirIfNotExistAndSavesFile) {

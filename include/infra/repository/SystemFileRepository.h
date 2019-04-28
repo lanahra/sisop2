@@ -16,6 +16,7 @@ class SystemFileRepository : public FileRepository {
     void makeDirIfNotExist(std::string dir);
     bool fileExists(std::string path);
     void makeDir(std::string dir);
+    void saveTimestamps(std::string path, Timestamps timestamps);
     Timestamps timestampsFrom(std::string filename);
     std::string bodyFrom(std::string path);
     std::list<FileEntry> readDirEntries(std::string dir);
