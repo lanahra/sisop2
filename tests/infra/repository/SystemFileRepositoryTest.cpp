@@ -15,8 +15,7 @@ TEST(SystemFileRepositoryTest, SavesFile) {
     system("mkdir -p sync_dir_first");
     File file("afile", Timestamps(10, 20, 0), "file body");
 
-    SystemClock clock;
-    SystemFileRepository repository(clock);
+    SystemFileRepository repository;
     repository.save("first", file);
 
     struct stat st;
@@ -30,8 +29,7 @@ TEST(SystemFileRepositoryTest, MakesDirIfNotExistAndSavesFile) {
     system("rm -fr sync_dir_second");
     File file("afile", Timestamps(0, 0, 0), "file body");
 
-    SystemClock clock;
-    SystemFileRepository repository(clock);
+    SystemFileRepository repository;
     repository.save("second", file);
 
     struct stat st;
@@ -43,8 +41,7 @@ TEST(SystemFileRepositoryTest, OverwritesExistingFile) {
     system("touch sync_dir_third/existing_file");
     File file("existing_file", Timestamps(0, 0, 0), "file body");
 
-    SystemClock clock;
-    SystemFileRepository repository(clock);
+    SystemFileRepository repository;
     repository.save("third", file);
 
     struct stat st;
@@ -55,8 +52,7 @@ TEST(SystemFileRepositoryTest, SavesFileLocally) {
     system("rm -fr afile");
     File file("afile", Timestamps(0, 0, 0), "file body");
 
-    SystemClock clock;
-    SystemFileRepository repository(clock);
+    SystemFileRepository repository;
     repository.saveLocal(file);
 
     struct stat st;
@@ -68,8 +64,7 @@ TEST(SystemFileRepositoryTest, GetsFileFromFileSystem) {
     system("touch sync_dir_fourth/content");
     system("echo \"file body\" > sync_dir_fourth/content");
 
-    SystemClock clock;
-    SystemFileRepository repository(clock);
+    SystemFileRepository repository;
     File file = repository.get("fourth", "content");
 
     EXPECT_THAT(file.getName(), Eq("content"));
@@ -77,15 +72,13 @@ TEST(SystemFileRepositoryTest, GetsFileFromFileSystem) {
 }
 
 TEST(SystemFileRepositoryTest, ThrowsExceptionForNonExistentFile) {
-    SystemClock clock;
-    SystemFileRepository repository(clock);
+    SystemFileRepository repository;
     EXPECT_THROW(repository.get("fifth", "non_existent"),
                  FileNotFoundException);
 }
 
 TEST(SystemFileRepositoryTest, GetsEmptyListForNonExistentDir) {
-    SystemClock clock;
-    SystemFileRepository repository(clock);
+    SystemFileRepository repository;
     std::list<FileEntry> entries = repository.getEntries("nonexistent");
 
     EXPECT_THAT(entries, IsEmpty());
@@ -100,8 +93,7 @@ TEST(SystemFileRepositoryTest, GetsFileEntriesFromDir) {
     system("mkdir -p sync_dir_sixth");
     system("touch sync_dir_sixth/first");
     system("touch sync_dir_sixth/second");
-    SystemClock clock;
-    SystemFileRepository repository(clock);
+    SystemFileRepository repository;
     std::list<FileEntry> entries = repository.getEntries("sixth");
 
     EXPECT_THAT(entries,
@@ -114,27 +106,77 @@ TEST(SystemFileRepositoryTest, RemovesFiles) {
     system("mkdir -p sync_dir_seventh");
     system("touch sync_dir_seventh/first");
     system("touch sync_dir_seventh/second");
-    MockClock clock;
-    EXPECT_CALL(clock, now()).WillOnce(Return(10)).WillOnce(Return(20));
 
-    SystemFileRepository repository(clock);
+    SystemFileRepository repository;
     repository.remove("seventh", "first");
     repository.remove("seventh", "second");
-
-    std::ifstream fileStream("sync_dir_seventh/.removed_files");
-    std::string deleted_files((std::istreambuf_iterator<char>(fileStream)),
-                              std::istreambuf_iterator<char>());
 
     struct stat st;
     EXPECT_THAT(stat("sync_dir_seventh/first", &st), Not(Eq(0)));
     EXPECT_THAT(stat("sync_dir_seventh/second", &st), Not(Eq(0)));
-    EXPECT_THAT(deleted_files, Eq("5,first,10\n6,second,20\n"));
 }
 
 TEST(SystemFileRepositoryTest, ThrowsExceptionForRemovingNonExistentFile) {
-    MockClock clock;
-    SystemFileRepository repository(clock);
+    SystemFileRepository repository;
 
     EXPECT_THROW(repository.remove("fifth", "non_existent"),
                  FileNotFoundException);
+}
+
+TEST(SystemFileRepositoryTest, ReturnsEmptyListForNonExistentStatus) {
+    system("rm -fr sync_dir_eighth");
+    system("mkdir -p sync_dir_eighth");
+
+    SystemFileRepository repository;
+    EXPECT_THAT(repository.getStatus("eighth"), Eq(std::list<FileEntry>()));
+}
+
+TEST(SystemFileRepositoryTest, ReturnsEmptyListForEmptyStatus) {
+    system("rm -fr sync_dir_ninth");
+    system("mkdir -p sync_dir_ninth");
+    system("touch sync_dir_ninth/.status");
+
+    SystemFileRepository repository;
+    EXPECT_THAT(repository.getStatus("ninth"), Eq(std::list<FileEntry>()));
+}
+
+TEST(SystemFileRepositoryTest, GetsStatus) {
+    system("rm -fr sync_dir_tenth");
+    system("mkdir -p sync_dir_tenth");
+    system("touch sync_dir_tenth/.status");
+    system(R"(printf "5,first,10,20,30\n6,second,10,20,30\n" > sync_dir_tenth/.status)");
+
+    std::list<FileEntry> entries({FileEntry("first", Timestamps(10, 20, 30)),
+                                  FileEntry("second", Timestamps(10, 20, 30))});
+
+    SystemFileRepository repository;
+    EXPECT_THAT(repository.getStatus("tenth"), Eq(entries));
+}
+
+TEST(SystemFileRepositoryTest, DoNotSaveEmptyStatus) {
+    system("rm -fr sync_dir_eleventh");
+    system("mkdir -p sync_dir_eleventh");
+
+    SystemFileRepository repository;
+    repository.saveStatus("eleventh", std::list<FileEntry>());
+
+    struct stat st;
+    EXPECT_THAT(stat("sync_dir_eleventh/.status", &st), Not(Eq(0)));
+}
+
+TEST(SystemFileRepositoryTest, SavesStatus) {
+    system("rm -fr sync_dir_eleventh");
+    system("mkdir -p sync_dir_eleventh");
+
+    std::list<FileEntry> entries({FileEntry("first", Timestamps(10, 20, 30)),
+                                  FileEntry("second", Timestamps(10, 20, 30))});
+
+    SystemFileRepository repository;
+    repository.saveStatus("eleventh", entries);
+
+    std::ifstream fileStream("sync_dir_eleventh/.status");
+    std::string status((std::istreambuf_iterator<char>(fileStream)),
+                       std::istreambuf_iterator<char>());
+
+    EXPECT_THAT(status, Eq("5,first,10,20,30\n6,second,10,20,30\n"));
 }
