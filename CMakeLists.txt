@@ -13,6 +13,7 @@ set(SOURCES
         src/infra/handler/DownloadFileCommandHandler.cpp
         src/infra/handler/DownloadFileHandler.cpp
         src/infra/handler/DownloadFileResponseHandler.cpp
+        src/infra/handler/UploadFileCommandHandler.cpp
         src/infra/handler/ExitCommandHandler.cpp
         src/infra/handler/ListFileEntriesHandler.cpp
         src/infra/handler/ListClientEntriesCommandHandler.cpp
@@ -30,8 +31,7 @@ set(SOURCES
         src/infra/repository/SystemFileRepository.cpp
         src/server/File.cpp
         src/server/User.cpp
-        src/server/SystemClock.cpp
-        )
+        src/server/SystemClock.cpp)
 set(TESTFILES
         tests/application/DefaultUserServiceTest.cpp
         tests/application/DefaultPrinterServiceTest.cpp

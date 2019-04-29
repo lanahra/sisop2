@@ -1,12 +1,18 @@
 #include "infra/repository/SystemFileRepository.h"
 
+#include <stdlib.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #include <utime.h>
 #include <fstream>
 #include <streambuf>
+#include <vector>
+#include <set>
+#include <sstream>
 #include "infra/repository/FileNotFoundException.h"
 #include "server/RemovedEntry.h"
+
+std::string fileNameFrom(std::string absolutePath);
 
 void SystemFileRepository::save(std::string dir, File file) {
     std::string syncDir(PREFIX + dir);
@@ -54,6 +60,28 @@ File SystemFileRepository::get(std::string dir, std::string filename) {
     } else {
         throw FileNotFoundException(path);
     }
+}
+
+File SystemFileRepository::getLocal(std::string fileAbsolutePath) {
+    if (fileExists(fileAbsolutePath)) {
+        return File(fileNameFrom(fileAbsolutePath),
+                    timestampsFrom(fileAbsolutePath),
+                    bodyFrom(fileAbsolutePath));
+    } else {
+        throw FileNotFoundException(fileAbsolutePath);
+    }
+}
+
+std::string fileNameFrom(std::string path) {
+    std::stringstream pathStringStream(path);
+    std::string aux;
+    std::vector<std::string> splitList;
+
+    while(std::getline(pathStringStream, aux, '/'))
+    {
+        splitList.push_back(aux);
+    }
+    return splitList.back();
 }
 
 Timestamps SystemFileRepository::timestampsFrom(std::string filename) {

@@ -76,6 +76,21 @@ TEST(SystemFileRepositoryTest, GetsFileFromFileSystem) {
     EXPECT_THAT(file.getBody(), Eq("file body\n"));
 }
 
+TEST(SystemFileRepositoryTest, GetsFileFromFileSystemFromPath) {
+    system("rm -rf Sisop2_Example_Folder");
+    system("mkdir Sisop2_Example_Folder");
+    system("touch Sisop2_Example_Folder/filename");
+    system("echo \"file body\" > Sisop2_Example_Folder/filename");
+
+    SystemClock clock;
+    SystemFileRepository repository(clock);
+    std::string path = "Sisop2_Example_Folder/filename";
+    File file = repository.getLocal(path);
+
+    EXPECT_THAT(file.getName(), Eq("filename"));
+    EXPECT_THAT(file.getBody(), Eq("file body\n"));
+}
+
 TEST(SystemFileRepositoryTest, ThrowsExceptionForNonExistentFile) {
     SystemClock clock;
     SystemFileRepository repository(clock);

@@ -27,6 +27,7 @@ class SystemFileRepository : public FileRepository {
     void save(std::string dir, File file);
     void saveLocal(File file);
     File get(std::string dir, std::string filename);
+    File getLocal(std::string fileAbsolutePath);
     std::list<FileEntry> getEntries(std::string dir);
     void remove(std::string dir, std::string filename) override;
 };
