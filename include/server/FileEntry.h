@@ -21,6 +21,11 @@ class FileEntry {
         return timestamps;
     }
 
+    bool newerThan(const FileEntry& entry) {
+        return timestamps.getLastModification()
+            > entry.getTimestamps().getLastModification();
+    }
+
     friend bool operator==(const FileEntry& self, const FileEntry& other) {
         return self.name == other.name && self.timestamps == other.timestamps;
     }

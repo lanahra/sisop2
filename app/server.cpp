@@ -14,8 +14,7 @@
 #include "infra/repository/SystemFileRepository.h"
 
 int main() {
-    SystemClock clock;
-    SystemFileRepository fileRepository(clock);
+    SystemFileRepository fileRepository;
     UserFactory userFactory(fileRepository);
     DefaultUserService userService(userFactory, fileRepository);
 

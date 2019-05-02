@@ -30,8 +30,7 @@ int main() {
     auto messageStreamer = std::make_shared<SocketMessageStreamer>(socket);
     OpenListenerLoop listenerLoop;
 
-    SystemClock clock;
-    SystemFileRepository fileRepository(clock);
+    SystemFileRepository fileRepository;
     UserFactory userFactory(fileRepository);
     DefaultUserService userService(userFactory, fileRepository);
 
