@@ -13,7 +13,6 @@
 #include "infra/repository/FileNotFoundException.h"
 #include "server/RemovedEntry.h"
 
-std::string fileNameFrom(std::string absolutePath);
 
 void SystemFileRepository::save(std::string dir, File file) {
     std::string syncDir(PREFIX + dir);
@@ -63,17 +62,17 @@ File SystemFileRepository::get(std::string dir, std::string filename) {
     }
 }
 
-File SystemFileRepository::getLocal(std::string fileAbsolutePath) {
-    if (fileExists(fileAbsolutePath)) {
-        return File(fileNameFrom(fileAbsolutePath),
-                    timestampsFrom(fileAbsolutePath),
-                    bodyFrom(fileAbsolutePath));
+File SystemFileRepository::getLocal(std::string path) {
+    if (fileExists(path)) {
+        return File(fileNameFrom(path),
+                    timestampsFrom(path),
+                    bodyFrom(path));
     } else {
-        throw FileNotFoundException(fileAbsolutePath);
+        throw FileNotFoundException(path);
     }
 }
 
-std::string fileNameFrom(std::string path) {
+std::string SystemFileRepository::fileNameFrom(std::string path) {
     std::stringstream pathStringStream(path);
     std::string aux;
     std::vector<std::string> splitList;
@@ -82,7 +81,7 @@ std::string fileNameFrom(std::string path) {
     {
         splitList.push_back(aux);
     }
-    return splitList.back();
+    return std::string(splitList.back());
 }
 
 Timestamps SystemFileRepository::timestampsFrom(std::string filename) {
@@ -170,3 +169,4 @@ void SystemFileRepository::saveStatus(std::string dir,
         }
     }
 }
+

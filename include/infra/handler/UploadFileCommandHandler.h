@@ -1,19 +1,16 @@
-//
-// Created by christian on 28/04/19.
-//
-
 #ifndef SISOP2_UPLOADFILECOMMANDHANDLER_H
 #define SISOP2_UPLOADFILECOMMANDHANDLER_H
 
 
 #include <infra/messaging/CommandHandler.h>
+#include <application/DefaultUserService.h>
 
 class UploadFileCommandHandler : public CommandHandler {
     const std::string ERROR_MESSAGE = "upload command takes 1 argument\n";
 
     std::string username;
     std::string operation;
-    std::string response;
+    UserService& userService;
     std::ostream& output;
 
     Message commandFrom(std::string filename);
@@ -21,11 +18,11 @@ class UploadFileCommandHandler : public CommandHandler {
 public:
     UploadFileCommandHandler(std::string username,
                              std::string operation,
-                             std::string response,
+                             UserService& userService,
                              std::ostream& output)
              :  username(username),
                 operation(operation),
-                response(response),
+                userService(userService),
                 output(output){};
     void handle(std::vector<std::string> args,
                 MessageStreamer& messageStreamer) override;

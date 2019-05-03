@@ -3,6 +3,7 @@
 #include <memory>
 #include <sstream>
 #include <vector>
+#include <infra/handler/UploadFileCommandHandler.h>
 #include "application/DefaultPrinterService.h"
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileCommandHandler.h"
@@ -67,6 +68,11 @@ int main() {
                                                        "file.download.request",
                                                        "file.download.response",
                                                        std::cout);
+    auto uploadFileCommandHandler
+            = std::make_shared<UploadFileCommandHandler>("sixth",
+                                                         "file.download.request",
+                                                         userService,
+                                                         std::cout);
 
     std::map<std::string, std::shared_ptr<CommandHandler>> commandHandlers;
     commandHandlers["exit"] = exitCommandHandler;

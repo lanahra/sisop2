@@ -17,6 +17,7 @@ class SystemFileRepository : public FileRepository {
     void saveTimestamps(std::string path, Timestamps timestamps);
     Timestamps timestampsFrom(std::string filename);
     std::string bodyFrom(std::string path);
+    std::string fileNameFrom(std::string path);
     std::list<FileEntry> readDirEntries(std::string dir);
     std::list<FileEntry> readStatusEntries(std::string path);
 
@@ -24,7 +25,7 @@ class SystemFileRepository : public FileRepository {
     void save(std::string dir, File file);
     void saveLocal(File file);
     File get(std::string dir, std::string filename);
-    File getLocal(std::string fileAbsolutePath);
+    File getLocal(std::string path);
     void remove(std::string dir, std::string filename) override;
     std::list<FileEntry> getEntries(std::string dir) override;
     std::list<FileEntry> getStatus(std::string dir) override;

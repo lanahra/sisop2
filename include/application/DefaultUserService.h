@@ -17,6 +17,7 @@ class DefaultUserService : public UserService {
     std::list<FileEntry> listFileEntries(std::string username) override;
     void removeFile(std::string username, std::string filename) override;
     void saveLocal(File file) override;
+    File getLocal(std::string path);
 };
 
 #endif

@@ -31,3 +31,7 @@ void DefaultUserService::tryToRemoveFile(std::string username,
 void DefaultUserService::saveLocal(File file) {
     repository.saveLocal(file);
 }
+
+File DefaultUserService::getLocal(std::string path) {
+    return repository.getLocal(path);
+}
