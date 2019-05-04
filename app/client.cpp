@@ -12,6 +12,7 @@
 #include "infra/handler/ListServerEntriesCommandHandler.h"
 #include "infra/handler/ListServerEntriesResponseHandler.h"
 #include "infra/handler/RemoveFileCommandHandler.h"
+#include "infra/handler/UploadFileCommandHandler.h"
 #include "infra/messaging/AsyncMessageListener.h"
 #include "infra/messaging/BlockingCommandListener.h"
 #include "infra/messaging/BlockingMessageListener.h"
@@ -70,6 +71,11 @@ int main() {
                                                        "file.download.request",
                                                        "file.download.response",
                                                        std::cout);
+    auto uploadFileCommandHandler
+            = std::make_shared<UploadFileCommandHandler>("sixth",
+                                                         "file.upload.request",
+                                                         userService,
+                                                         std::cout);
 
     std::map<std::string, std::shared_ptr<CommandHandler>> commandHandlers;
     commandHandlers["exit"] = exitCommandHandler;
@@ -78,6 +84,7 @@ int main() {
     commandHandlers["delete"] = removeFileCommandHandler;
     commandHandlers["download"] = downloadFileCommandHandler;
     commandHandlers["get_sync_dir"] = syncCommandHandler;
+    commandHandlers["upload"] = uploadFileCommandHandler;
 
     BlockingCommandListener commandListener(
         std::cin, listenerLoop, messageStreamer, commandHandlers);

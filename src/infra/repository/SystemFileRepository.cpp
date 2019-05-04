@@ -1,13 +1,18 @@
 #include "infra/repository/SystemFileRepository.h"
 
+#include <stdlib.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #include <utime.h>
 #include <fstream>
 #include <sstream>
 #include <streambuf>
+#include <vector>
+#include <set>
+#include <sstream>
 #include "infra/repository/FileNotFoundException.h"
 #include "server/RemovedEntry.h"
+
 
 void SystemFileRepository::save(std::string dir, File file) {
     std::string syncDir(PREFIX + dir);
@@ -69,6 +74,28 @@ std::string SystemFileRepository::bodyFrom(std::string path) {
     std::ifstream fileStream(path);
     return std::string((std::istreambuf_iterator<char>(fileStream)),
                        std::istreambuf_iterator<char>());
+}
+
+File SystemFileRepository::getLocal(std::string path) {
+    if (fileExists(path)) {
+        return File(fileNameFrom(path),
+                    timestampsFrom(path),
+                    bodyFrom(path));
+    } else {
+        throw FileNotFoundException(path);
+    }
+}
+
+std::string SystemFileRepository::fileNameFrom(std::string path) {
+    std::stringstream pathStringStream(path);
+    std::string aux;
+    std::vector<std::string> splitList;
+
+    while(std::getline(pathStringStream, aux, '/'))
+    {
+        splitList.push_back(aux);
+    }
+    return std::string(splitList.back());
 }
 
 void SystemFileRepository::remove(std::string dir, std::string filename) {
@@ -142,3 +169,4 @@ void SystemFileRepository::saveStatus(std::string dir,
         }
     }
 }
+
