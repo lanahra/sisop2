@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 #include "MockFileRepository.h"
-#include "server/User.h"
+#include "server/DefaultUser.h"
 
 using ::testing::Eq;
 using ::testing::Return;
@@ -10,7 +10,7 @@ TEST(UserTest, GetsUserFile) {
     MockFileRepository repository;
     EXPECT_CALL(repository, get("name", "file"));
 
-    User user("name", repository);
+    DefaultUser user("name", repository);
     user.getFile("file");
 }
 
@@ -18,7 +18,7 @@ TEST(UserTest, ListsUserEntries) {
     MockFileRepository repository;
     EXPECT_CALL(repository, getEntries("name"));
 
-    User user("name", repository);
+    DefaultUser user("name", repository);
     user.listEntries();
 }
 
@@ -26,7 +26,7 @@ TEST(UserTest, RemovesUserFile) {
     MockFileRepository repository;
     EXPECT_CALL(repository, remove("name", "file"));
 
-    User user("name", repository);
+    DefaultUser user("name", repository);
     user.removeFile("file");
 }
 
@@ -43,7 +43,7 @@ TEST(UserTest, SyncNewRemote) {
 
     std::list<FileEntry> remote({FileEntry("new", Timestamps(10, 20, 30))});
 
-    User user("name", repository);
+    DefaultUser user("name", repository);
 
     std::list<SyncOperation> expected(
         {SyncOperation(SyncOperation::DOWNLOAD, "new")});
@@ -64,7 +64,7 @@ TEST(UserTest, SyncNewLocal) {
 
     std::list<FileEntry> remote;
 
-    User user("name", repository);
+    DefaultUser user("name", repository);
 
     std::list<SyncOperation> expected(
         {SyncOperation(SyncOperation::UPLOAD, "new")});
@@ -84,7 +84,7 @@ TEST(UserTest, SyncRemovedRemote) {
 
     std::list<FileEntry> remote;
 
-    User user("name", repository);
+    DefaultUser user("name", repository);
 
     std::list<SyncOperation> expected;
     EXPECT_THAT(user.sync(remote), Eq(expected));
@@ -101,7 +101,7 @@ TEST(UserTest, SyncRemovedLocal) {
 
     std::list<FileEntry> remote({FileEntry("removed", Timestamps(10, 20, 30))});
 
-    User user("name", repository);
+    DefaultUser user("name", repository);
 
     std::list<SyncOperation> expected(
         {SyncOperation(SyncOperation::DELETE, "removed")});
@@ -119,7 +119,7 @@ TEST(UserTest, SyncMissing) {
 
     std::list<FileEntry> remote;
 
-    User user("name", repository);
+    DefaultUser user("name", repository);
 
     std::list<SyncOperation> expected;
     EXPECT_THAT(user.sync(remote), Eq(expected));
@@ -139,7 +139,7 @@ TEST(UserTest, SyncNewerRemote) {
 
     std::list<FileEntry> remote({FileEntry("file", Timestamps(0, 20, 0))});
 
-    User user("name", repository);
+    DefaultUser user("name", repository);
 
     std::list<SyncOperation> expected(
         {SyncOperation(SyncOperation::DOWNLOAD, "file")});
@@ -160,7 +160,7 @@ TEST(UserTest, SyncNewerLocal) {
 
     std::list<FileEntry> remote({FileEntry("file", Timestamps(0, 10, 0))});
 
-    User user("name", repository);
+    DefaultUser user("name", repository);
 
     std::list<SyncOperation> expected(
         {SyncOperation(SyncOperation::UPLOAD, "file")});
@@ -181,7 +181,7 @@ TEST(UserTest, DoNotSyncForAlreadySynchronized) {
 
     std::list<FileEntry> remote({FileEntry("sync", Timestamps(10, 20, 30))});
 
-    User user("name", repository);
+    DefaultUser user("name", repository);
 
     std::list<SyncOperation> expected;
     EXPECT_THAT(user.sync(remote), Eq(expected));

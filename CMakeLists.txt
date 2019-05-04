@@ -20,6 +20,7 @@ set(SOURCES
         src/infra/handler/ListServerEntriesResponseHandler.cpp
         src/infra/handler/RemoveFileCommandHandler.cpp
         src/infra/handler/RemoveFileHandler.cpp
+        src/infra/handler/SyncEntriesResponseHandler.cpp
         src/infra/messaging/AsyncMessageListener.cpp
         src/infra/messaging/AsyncMessageListenerFactory.cpp
         src/infra/messaging/BlockingCommandListener.cpp
@@ -27,9 +28,10 @@ set(SOURCES
         src/infra/messaging/ConnectionListener.cpp
         src/infra/messaging/SocketMessageStreamer.cpp
         src/infra/messaging/TcpSocket.cpp
+        src/infra/repository/DefaultUserRepository.cpp
         src/infra/repository/SystemFileRepository.cpp
         src/server/File.cpp
-        src/server/User.cpp
+        src/server/DefaultUser.cpp
         src/server/SystemClock.cpp
         )
 set(TESTFILES
@@ -50,6 +52,7 @@ set(TESTFILES
         tests/infra/handler/RemoveFileRequestTest.cpp
         tests/infra/handler/RemoveFileHandlerTest.cpp
         tests/infra/handler/RemoveFileCommandHandlerTest.cpp
+        tests/infra/handler/SyncEntriesResponseHandlerTest.cpp
         tests/infra/messaging/AsyncMessageListenerTest.cpp
         tests/infra/messaging/BlockingMessageListenerTest.cpp
         tests/infra/messaging/ConnectionListenerTest.cpp
@@ -57,12 +60,13 @@ set(TESTFILES
         tests/infra/messaging/OpenListenerLoopTest.cpp
         tests/infra/messaging/SocketMessageStreamerTest.cpp
         tests/infra/messaging/TcpSocketTest.cpp
+        tests/infra/repository/DefaultUserRepositorytest.cpp
         tests/infra/repository/SystemFileRepositoryTest.cpp
         tests/server/FileEntryTest.cpp
         tests/server/FileTest.cpp
         tests/server/RemovedEntryTest.cpp
         tests/server/TimestampsTest.cpp
-        tests/server/UserTest.cpp
+        tests/server/DefaultUserTest.cpp
         tests/server/SystemClockTest.cpp
         )
 

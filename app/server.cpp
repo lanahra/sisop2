@@ -1,8 +1,6 @@
-#include <server/SystemClock.h>
 #include <map>
 #include <memory>
 #include "application/DefaultUserService.h"
-#include "application/UserFactory.h"
 #include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
 #include "infra/handler/RemoveFileHandler.h"
@@ -11,12 +9,13 @@
 #include "infra/messaging/MessageHandler.h"
 #include "infra/messaging/OpenListenerLoop.h"
 #include "infra/messaging/TcpSocket.h"
+#include "infra/repository/DefaultUserRepository.h"
 #include "infra/repository/SystemFileRepository.h"
 
 int main() {
     SystemFileRepository fileRepository;
-    UserFactory userFactory(fileRepository);
-    DefaultUserService userService(userFactory, fileRepository);
+    DefaultUserRepository userRepository(fileRepository);
+    DefaultUserService userService(userRepository, fileRepository);
 
     // create handler for command.establish_session
     auto listFileEntriesHandler

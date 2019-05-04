@@ -1,19 +1,19 @@
-#include "server/User.h"
+#include "server/DefaultUser.h"
 #include <algorithm>
 
-File User::getFile(std::string filename) {
+File DefaultUser::getFile(std::string filename) {
     return fileRepository.get(name, filename);
 }
 
-std::list<FileEntry> User::listEntries() {
+std::list<FileEntry> DefaultUser::listEntries() {
     return fileRepository.getEntries(name);
 }
 
-void User::removeFile(std::string filename) {
+void DefaultUser::removeFile(std::string filename) {
     fileRepository.remove(name, filename);
 }
 
-std::list<SyncOperation> User::sync(std::list<FileEntry> remote) {
+std::list<SyncOperation> DefaultUser::sync(std::list<FileEntry> remote) {
     std::list<SyncOperation> operations;
     std::list<FileEntry> local = fileRepository.getEntries(name);
     std::list<FileEntry> status = fileRepository.getStatus(name);
@@ -75,7 +75,7 @@ std::list<SyncOperation> User::sync(std::list<FileEntry> remote) {
     return operations;
 }
 
-bool User::contains(std::list<FileEntry> entries, FileEntry entry) {
+bool DefaultUser::contains(std::list<FileEntry> entries, FileEntry entry) {
     return (std::find_if(entries.begin(),
                          entries.end(),
                          [&](const FileEntry& e) {
@@ -84,7 +84,7 @@ bool User::contains(std::list<FileEntry> entries, FileEntry entry) {
             != entries.end());
 }
 
-FileEntry User::findEntry(std::list<FileEntry> entries, FileEntry entry) {
+FileEntry DefaultUser::findEntry(std::list<FileEntry> entries, FileEntry entry) {
     auto it
         = std::find_if(entries.begin(), entries.end(), [&](const FileEntry& e) {
               return e.getName() == entry.getName();

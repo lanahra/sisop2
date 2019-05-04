@@ -20,8 +20,8 @@
 #include "infra/messaging/Socket.h"
 #include "infra/messaging/SocketMessageStreamer.h"
 #include "infra/messaging/TcpSocket.h"
+#include "infra/repository/DefaultUserRepository.h"
 #include "infra/repository/SystemFileRepository.h"
-#include "server/SystemClock.h"
 
 int main() {
     auto socket = std::make_shared<TcpSocket>();
@@ -31,8 +31,8 @@ int main() {
     OpenListenerLoop listenerLoop;
 
     SystemFileRepository fileRepository;
-    UserFactory userFactory(fileRepository);
-    DefaultUserService userService(userFactory, fileRepository);
+    DefaultUserRepository userRepository(fileRepository);
+    DefaultUserService userService(userRepository, fileRepository);
 
     DefaultPrinterService printerService(std::cout);
 
@@ -60,6 +60,9 @@ int main() {
     auto listServerCommandHandler
         = std::make_shared<ListServerEntriesCommandHandler>(
             "sixth", "file.list.request", "file.list.response");
+    auto syncCommandHandler
+        = std::make_shared<ListServerEntriesCommandHandler>(
+            "sixth", "file.list.request", "file.sync.response");
     auto removeFileCommandHandler = std::make_shared<RemoveFileCommandHandler>(
         "sixth", "file.remove.request", std::cout);
     auto downloadFileCommandHandler
@@ -74,6 +77,7 @@ int main() {
     commandHandlers["list_server"] = listServerCommandHandler;
     commandHandlers["delete"] = removeFileCommandHandler;
     commandHandlers["download"] = downloadFileCommandHandler;
+    commandHandlers["get_sync_dir"] = syncCommandHandler;
 
     BlockingCommandListener commandListener(
         std::cin, listenerLoop, messageStreamer, commandHandlers);

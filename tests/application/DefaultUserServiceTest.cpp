@@ -1,59 +1,64 @@
 #include <gmock/gmock.h>
 #include "../server/MockFileRepository.h"
+#include "../server/MockUser.h"
+#include "../server/MockUserRepository.h"
 #include "application/DefaultUserService.h"
-#include "application/UserFactory.h"
 #include "infra/repository/FileNotFoundException.h"
 
+using ::testing::Ref;
+using ::testing::Return;
+using ::testing::ByMove;
 using ::testing::Throw;
 
 TEST(DefaultUserService, GetsUserFile) {
-    MockFileRepository repository;
-    EXPECT_CALL(repository, get("name", "file"));
+    auto user = std::unique_ptr<MockUser>(new MockUser());
+    EXPECT_CALL(*user, getFile("file"));
 
-    UserFactory factory(repository);
-    DefaultUserService service(factory, repository);
+    MockUserRepository userRepository;
+    EXPECT_CALL(userRepository, getUser("name"))
+        .WillOnce(Return(ByMove(std::move(user))));
+
+    MockFileRepository fileRepository;
+    DefaultUserService service(userRepository, fileRepository);
 
     service.getFile("name", "file");
 }
 
-TEST(DefaultUserServiceTest, GetsUserFileEntries) {
-    MockFileRepository repository;
-    EXPECT_CALL(repository, getEntries("name"));
+ TEST(DefaultUserServiceTest, GetsUserFileEntries) {
+    auto user = std::unique_ptr<MockUser>(new MockUser());
+    EXPECT_CALL(*user, listEntries());
 
-    UserFactory factory(repository);
-    DefaultUserService service(factory, repository);
+    MockUserRepository userRepository;
+    EXPECT_CALL(userRepository, getUser("name"))
+        .WillOnce(Return(ByMove(std::move(user))));
+
+    MockFileRepository fileRepository;
+    DefaultUserService service(userRepository, fileRepository);
 
     service.listFileEntries("name");
 }
 
-TEST(DefaultUserServiceTest, RemovesUserFile) {
-    MockFileRepository repository;
-    EXPECT_CALL(repository, remove("name", "file"));
+ TEST(DefaultUserServiceTest, RemovesUserFile) {
+    auto user = std::unique_ptr<MockUser>(new MockUser());
+    EXPECT_CALL(*user, removeFile("file"));
 
-    UserFactory factory(repository);
-    DefaultUserService service(factory, repository);
+    MockUserRepository userRepository;
+    EXPECT_CALL(userRepository, getUser("name"))
+        .WillOnce(Return(ByMove(std::move(user))));
 
-    service.removeFile("name", "file");
-}
-
-TEST(DefaultUserServiceTest, IgnoresRemoveForFileNotFound) {
-    MockFileRepository repository;
-    EXPECT_CALL(repository, remove("name", "file"))
-        .WillOnce(Throw(FileNotFoundException("file")));
-
-    UserFactory factory(repository);
-    DefaultUserService service(factory, repository);
+    MockFileRepository fileRepository;
+    DefaultUserService service(userRepository, fileRepository);
 
     service.removeFile("name", "file");
 }
 
-TEST(DefaultUserServiceTest, SavesFileLocally) {
-    MockFileRepository repository;
+ TEST(DefaultUserServiceTest, SavesFileLocally) {
+    MockFileRepository fileRepository;
     File file("file", Timestamps(10, 20, 30), "body");
-    EXPECT_CALL(repository, saveLocal(file));
+    EXPECT_CALL(fileRepository, saveLocal(file));
 
-    UserFactory factory(repository);
-    DefaultUserService service(factory, repository);
+    MockUserRepository userRepository;
+    DefaultUserService service(userRepository, fileRepository);
 
     service.saveLocal(file);
 }

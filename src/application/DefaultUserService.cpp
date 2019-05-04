@@ -4,13 +4,13 @@
 #include <iostream>
 
 File DefaultUserService::getFile(std::string username, std::string filename) {
-    User user = userFactory.createUser(username);
-    return user.getFile(filename);
+    auto user = userRepository.getUser(username);
+    return user->getFile(filename);
 }
 
 std::list<FileEntry> DefaultUserService::listFileEntries(std::string username) {
-    User user = userFactory.createUser(username);
-    return user.listEntries();
+    auto user = userRepository.getUser(username);
+    return user->listEntries();
 }
 
 void DefaultUserService::removeFile(std::string username,
@@ -24,10 +24,17 @@ void DefaultUserService::removeFile(std::string username,
 
 void DefaultUserService::tryToRemoveFile(std::string username,
                                          std::string filename) {
-    User user = userFactory.createUser(username);
-    user.removeFile(filename);
+    auto user = userRepository.getUser(username);
+    user->removeFile(filename);
 }
 
 void DefaultUserService::saveLocal(File file) {
-    repository.saveLocal(file);
+    fileRepository.saveLocal(file);
+}
+
+std::list<SyncOperation> DefaultUserService::syncUser(
+    std::string username,
+    std::list<FileEntry> remote) {
+    auto user = userRepository.getUser(username);
+    return user->sync(remote);
 }
