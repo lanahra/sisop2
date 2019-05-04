@@ -1,6 +1,7 @@
 #include <server/SystemClock.h>
 #include <map>
 #include <memory>
+#include <infra/handler/SaveFileHandler.h>
 #include "application/DefaultUserService.h"
 #include "application/UserFactory.h"
 #include "infra/handler/DownloadFileHandler.h"
@@ -27,11 +28,14 @@ int main() {
 
     auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService);
 
+    auto saveFileHandler = std::make_shared<SaveFileHandler>(userService);
+
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
     handlers["file.list.request"] = listFileEntriesHandler;
     handlers["file.download.request"] = downloadFileHandler;
     handlers["file.remove.request"] = removeFileHandler;
+    handlers["file.upload.request"] = saveFileHandler;
 
     // factory for message listeners for every new connection
     OpenListenerLoop listenerLoop;
