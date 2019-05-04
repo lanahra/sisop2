@@ -64,7 +64,7 @@ set(TESTFILES
         tests/server/TimestampsTest.cpp
         tests/server/UserTest.cpp
         tests/server/SystemClockTest.cpp
-        )
+        tests/infra/handler/UploadFileRequestTest.cpp)
 
 add_library(engine ${SOURCES})
 

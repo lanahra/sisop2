@@ -18,7 +18,7 @@ Message UploadFileCommandHandler::commandFrom(std::string filePath) {
     File file = userService.getLocal(filePath);
     UploadFileRequest request(username, file);
     std::stringstream serialized;
-    //serialized << request;
+    serialized << request;
     return Message(operation, serialized.str());
 }
 

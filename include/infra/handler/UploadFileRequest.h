@@ -17,7 +17,7 @@ class UploadFileRequest {
         return username;
     }
 
-    File getFilename() {
+    File getFile() {
         return file;
     }
 
@@ -27,11 +27,11 @@ class UploadFileRequest {
                && self.file == other.file;
     }
 
-    /*
+
     friend std::ostream& operator<<(std::ostream& out,
                                     const UploadFileRequest& self) {
         return out << self.username.size() << ',' << self.username << ','
-                   << self.file.size() << ',' << self.file;
+                    << self.file;
     }
 
     friend std::istream& operator>>(std::istream& in,
@@ -42,13 +42,10 @@ class UploadFileRequest {
         self.username.resize(size);
         in.read(&self.username[0], size);
         in.ignore(1, ',');
-        in >> size;
-        in.ignore(1, ',');
-        self.file.resize(size);
-        in.read(&self.file[0], size);
+        in >> self.file;
         return in;
     }
-    */
+
 };
 
 
