@@ -13,6 +13,7 @@ class UserService {
     virtual void removeFile(std::string username, std::string filename) = 0;
     virtual void saveLocal(File file) = 0;
     virtual File getLocal(std::string path) = 0;
+    virtual void saveFile(std::string username, File file) = 0;
 };
 
 #endif

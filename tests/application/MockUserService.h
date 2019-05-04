@@ -10,7 +10,7 @@ class MockUserService : public UserService {
     MOCK_METHOD2(removeFile, void(std::string, std::string));
     MOCK_METHOD1(saveLocal, void(File));
     MOCK_METHOD1(getLocal, File(std::string));
-
+    MOCK_METHOD2(saveFile, void(std::string, File file));
 };
 
 #endif

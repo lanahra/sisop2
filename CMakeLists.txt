@@ -31,7 +31,7 @@ set(SOURCES
         src/infra/repository/SystemFileRepository.cpp
         src/server/File.cpp
         src/server/User.cpp
-        src/server/SystemClock.cpp)
+        src/server/SystemClock.cpp src/infra/handler/SaveFileHandler.cpp include/infra/handler/SaveFileHandler.h)
 set(TESTFILES
         tests/application/DefaultUserServiceTest.cpp
         tests/application/DefaultPrinterServiceTest.cpp

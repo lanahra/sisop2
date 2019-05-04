@@ -28,6 +28,10 @@ void DefaultUserService::tryToRemoveFile(std::string username,
     user.removeFile(filename);
 }
 
+void DefaultUserService::saveFile(std::string username, File file){
+    repository.save("", file);
+}
+
 void DefaultUserService::saveLocal(File file) {
     repository.saveLocal(file);
 }

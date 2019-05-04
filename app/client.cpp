@@ -70,7 +70,7 @@ int main() {
                                                        std::cout);
     auto uploadFileCommandHandler
             = std::make_shared<UploadFileCommandHandler>("sixth",
-                                                         "file.download.request",
+                                                         "file.upload.request",
                                                          userService,
                                                          std::cout);
 
@@ -80,6 +80,7 @@ int main() {
     commandHandlers["list_server"] = listServerCommandHandler;
     commandHandlers["delete"] = removeFileCommandHandler;
     commandHandlers["download"] = downloadFileCommandHandler;
+    commandHandlers["upload"] = uploadFileCommandHandler;
 
     BlockingCommandListener commandListener(
         std::cin, listenerLoop, messageStreamer, commandHandlers);
