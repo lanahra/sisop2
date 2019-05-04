@@ -1,5 +1,6 @@
 #include <map>
 #include <memory>
+#include <sstream>
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
@@ -13,7 +14,17 @@
 #include "infra/repository/DefaultUserRepository.h"
 #include "infra/repository/SystemFileRepository.h"
 
-int main() {
+int main(int argc, char** argv) {
+    int port;
+    if (argc < 2) {
+        std::cout << "port number expected" << std::endl;
+        exit(EXIT_FAILURE);
+    } else {
+        std::stringstream arg;
+        arg << argv[1];
+        arg >> port;
+    }
+
     SystemFileRepository fileRepository;
     DefaultUserRepository userRepository(fileRepository);
     DefaultUserService userService(userRepository, fileRepository);
@@ -43,5 +54,5 @@ int main() {
     // starts listening for connections
     TcpSocket socket;
     ConnectionListener connectionListener(socket, listenerLoop, factory);
-    connectionListener.listen(8888);
+    connectionListener.listen(port);
 }

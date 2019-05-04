@@ -6,7 +6,7 @@
 #include "application/UserService.h"
 #include "infra/messaging/MessageHandler.h"
 
-class SyncEntriesResponseHandler : MessageHandler {
+class SyncEntriesResponseHandler : public MessageHandler {
     std::string username;
     SyncEndpoints endpoints;
     UserService& service;
@@ -25,6 +25,7 @@ class SyncEntriesResponseHandler : MessageHandler {
                                UserService& service)
         : username(username), endpoints(endpoints), service(service){};
     void handle(Message message, MessageStreamer& messageStreamer) override;
+    Message uploadMessageFor(std::string filename);
 };
 
 #endif

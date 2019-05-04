@@ -1,5 +1,4 @@
 #include <gmock/gmock.h>
-#include <server/SystemClock.h>
 #include <fstream>
 #include "../../server/MockClock.h"
 #include "infra/repository/FileNotFoundException.h"

@@ -22,6 +22,7 @@ set(SOURCES
         src/infra/handler/RemoveFileCommandHandler.cpp
         src/infra/handler/RemoveFileHandler.cpp
         src/infra/handler/SaveFileHandler.cpp
+        src/infra/handler/SyncFileResponseHandler.cpp
         src/infra/handler/SyncEntriesResponseHandler.cpp
         src/infra/messaging/AsyncMessageListener.cpp
         src/infra/messaging/AsyncMessageListenerFactory.cpp
@@ -34,7 +35,6 @@ set(SOURCES
         src/infra/repository/SystemFileRepository.cpp
         src/server/File.cpp
         src/server/DefaultUser.cpp
-        src/server/SystemClock.cpp
         )
 set(TESTFILES
         tests/application/DefaultUserServiceTest.cpp
@@ -55,6 +55,7 @@ set(TESTFILES
         tests/infra/handler/RemoveFileHandlerTest.cpp
         tests/infra/handler/RemoveFileCommandHandlerTest.cpp
         tests/infra/handler/UploadFileRequestTest.cpp
+        tests/infra/handler/SyncFileResponseHandlerTest.cpp
         tests/infra/handler/SyncEntriesResponseHandlerTest.cpp
         tests/infra/messaging/AsyncMessageListenerTest.cpp
         tests/infra/messaging/BlockingMessageListenerTest.cpp
@@ -70,7 +71,6 @@ set(TESTFILES
         tests/server/RemovedEntryTest.cpp
         tests/server/TimestampsTest.cpp
         tests/server/DefaultUserTest.cpp
-        tests/server/SystemClockTest.cpp
         )
 
 add_library(engine ${SOURCES})

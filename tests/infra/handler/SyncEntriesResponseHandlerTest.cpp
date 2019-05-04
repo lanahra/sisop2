@@ -19,11 +19,10 @@ TEST(SyncEntriesResponseHandlerTest, SendsSyncOperations) {
         .WillOnce(Return(std::list<SyncOperation>(
             {SyncOperation(SyncOperation::DOWNLOAD, "one"),
              SyncOperation(SyncOperation::DELETE, "two"),
-             /* TODO SyncOperation(SyncOperation::UPLOAD, "three") */})));
-    /* TODO
+             SyncOperation(SyncOperation::UPLOAD, "three")})));
+
     File three("three", Timestamps(1556249031, 1556249031, 1556249031), "body");
     EXPECT_CALL(service, getFile("name", "three")).WillOnce(Return(three));
-     */
 
     SyncEndpoints endpoints
         = SyncEndpoints::Builder()
@@ -46,10 +45,10 @@ TEST(SyncEntriesResponseHandlerTest, SendsSyncOperations) {
             "download.operation", "4,name,3,one", "download.response")));
     EXPECT_CALL(messageStreamer,
                 send(Message("remove.operation", "4,name,3,two")));
-    /* TODO
     EXPECT_CALL(messageStreamer,
-                send(Message("upload.operation", "4,name,5,three")));
-     */
+                send(Message(
+                    "upload.operation",
+                    "4,name,5,three,1556249031,1556249031,1556249031,4,body")));
     EXPECT_CALL(messageStreamer,
                 send(Message("list.operation", "name", "list.response")));
 

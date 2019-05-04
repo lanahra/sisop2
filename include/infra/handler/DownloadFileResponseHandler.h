@@ -12,11 +12,12 @@ class DownloadFileResponseHandler : public MessageHandler {
     UserService& service;
     std::ostream& output;
 
+    DownloadFileResponse deserializeMessage(std::string body);
+
   public:
     DownloadFileResponseHandler(UserService& service, std::ostream& output)
         : service(service), output(output){};
     void handle(Message message, MessageStreamer& messageStreamer) override;
-    DownloadFileResponse deserializeMessage(std::string body);
 };
 
 #endif

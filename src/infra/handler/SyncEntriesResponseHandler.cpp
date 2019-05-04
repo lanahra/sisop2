@@ -3,6 +3,7 @@
 
 #include <infra/handler/DownloadFileRequest.h>
 #include <infra/handler/RemoveFileRequest.h>
+#include <infra/handler/UploadFileRequest.h>
 #include <sstream>
 
 void SyncEntriesResponseHandler::handle(Message message,
@@ -31,7 +32,7 @@ std::list<Message> SyncEntriesResponseHandler::messagesFor(
                 messages.push_back(downloadMessageFor(operation.getFilename()));
                 break;
             case SyncOperation::UPLOAD:
-                // TODO messages.push_back(uploadMessageFor(operation.getFilename()));
+                messages.push_back(uploadMessageFor(operation.getFilename()));
                 break;
             case SyncOperation::DELETE:
                 messages.push_back(deleteMessageFor(operation.getFilename()));
@@ -49,6 +50,14 @@ Message SyncEntriesResponseHandler::downloadMessageFor(std::string filename) {
     return Message(endpoints.getDownloadFileOperation(),
                    serialized.str(),
                    endpoints.getDownloadFileResponse());
+}
+
+Message SyncEntriesResponseHandler::uploadMessageFor(std::string filename) {
+    File file = service.getFile(username, filename);
+    UploadFileRequest request(username, file);
+    std::stringstream serialized;
+    serialized << request;
+    return Message(endpoints.getUploadFileOperation(), serialized.str());
 }
 
 Message SyncEntriesResponseHandler::deleteMessageFor(std::string filename) {
