@@ -9,6 +9,7 @@ class MockUser : public User {
     MOCK_METHOD1(getFile, File(std::string));
     MOCK_METHOD0(listEntries, std::list<FileEntry>());
     MOCK_METHOD1(removeFile, void(std::string));
+    MOCK_METHOD1(saveFile, void(File));
     MOCK_METHOD1(sync, std::list<SyncOperation>(std::list<FileEntry>));
 };
 

@@ -18,6 +18,7 @@ class DefaultUser : public User {
     File getFile(std::string filename);
     std::list<FileEntry> listEntries();
     void removeFile(std::string filename);
+    void saveFile(File file) override;
     std::list<SyncOperation> sync(std::list<FileEntry> remote);
 };
 

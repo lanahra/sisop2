@@ -27,6 +27,7 @@
 #include "infra/messaging/TcpSocket.h"
 #include "infra/repository/DefaultUserRepository.h"
 #include "infra/repository/SystemFileRepository.h"
+#include "infra/synchronization/DefaultKeyLock.h"
 
 struct config {
     std::string username;
@@ -47,7 +48,8 @@ int main(int argc, char** argv) {
 
     SystemFileRepository fileRepository;
     DefaultUserRepository userRepository(fileRepository);
-    DefaultUserService userService(userRepository, fileRepository);
+    DefaultKeyLock keyLock;
+    DefaultUserService userService(userRepository, fileRepository, keyLock);
 
     DefaultPrinterService printerService(std::cout);
 

@@ -13,6 +13,7 @@
 #include "infra/messaging/TcpSocket.h"
 #include "infra/repository/DefaultUserRepository.h"
 #include "infra/repository/SystemFileRepository.h"
+#include "infra/synchronization/DefaultKeyLock.h"
 
 int main(int argc, char** argv) {
     int port;
@@ -27,7 +28,8 @@ int main(int argc, char** argv) {
 
     SystemFileRepository fileRepository;
     DefaultUserRepository userRepository(fileRepository);
-    DefaultUserService userService(userRepository, fileRepository);
+    DefaultKeyLock keyLock;
+    DefaultUserService userService(userRepository, fileRepository, keyLock);
 
     // create handler for command.establish_session
     auto listFileEntriesHandler

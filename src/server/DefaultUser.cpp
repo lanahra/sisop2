@@ -13,6 +13,10 @@ void DefaultUser::removeFile(std::string filename) {
     fileRepository.remove(name, filename);
 }
 
+void DefaultUser::saveFile(File file) {
+    fileRepository.save(name, file);
+}
+
 std::list<SyncOperation> DefaultUser::sync(std::list<FileEntry> remote) {
     std::list<SyncOperation> operations;
     std::list<FileEntry> local = fileRepository.getEntries(name);
@@ -83,7 +87,6 @@ bool DefaultUser::contains(std::list<FileEntry> entries, FileEntry entry) {
                          })
             != entries.end());
 }
-
 FileEntry DefaultUser::findEntry(std::list<FileEntry> entries, FileEntry entry) {
     auto it
         = std::find_if(entries.begin(), entries.end(), [&](const FileEntry& e) {

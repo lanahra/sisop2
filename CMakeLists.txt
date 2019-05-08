@@ -24,6 +24,8 @@ set(SOURCES
         src/infra/handler/SaveFileHandler.cpp
         src/infra/handler/SyncFileResponseHandler.cpp
         src/infra/handler/SyncEntriesResponseHandler.cpp
+        src/infra/synchronization/DefaultKeyLock.cpp
+        src/infra/synchronization/ReadWriteLock.cpp
         src/infra/messaging/AsyncMessageListener.cpp
         src/infra/messaging/AsyncMessageListenerFactory.cpp
         src/infra/messaging/BlockingCommandListener.cpp

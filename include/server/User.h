@@ -13,6 +13,7 @@ class User {
     virtual File getFile(std::string filename) = 0;
     virtual std::list<FileEntry> listEntries() = 0;
     virtual void removeFile(std::string filename) = 0;
+    virtual void saveFile(File file) = 0;
     virtual std::list<SyncOperation> sync(std::list<FileEntry> remote) = 0;
 };
 
