@@ -160,13 +160,15 @@ std::list<FileEntry> SystemFileRepository::readStatusEntries(std::string path) {
 
 void SystemFileRepository::saveStatus(std::string dir,
                                       std::list<FileEntry> entries) {
-    std::string path(PREFIX + dir + "/" + STATUS_FILE);
-
+    std::string syncDir(PREFIX + dir);
+    makeDirIfNotExist(syncDir);
+    std::string path(syncDir + "/" + STATUS_FILE);
+    std::ofstream fileStream(path);
     if (!entries.empty()) {
-        std::ofstream fileStream(path);
         for (FileEntry entry : entries) {
             fileStream << entry << std::endl;
         }
     }
+    fileStream.close();
 }
 

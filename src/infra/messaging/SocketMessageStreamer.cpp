@@ -16,6 +16,7 @@ Message SocketMessageStreamer::messageFrom(std::string serialized) {
 }
 
 void SocketMessageStreamer::send(Message message) {
+    std::unique_lock<std::mutex> lk(mutex);
     std::string serialized = serializedFrom(message);
     socket->writeInt(serialized.size());
     socket->write(serialized);

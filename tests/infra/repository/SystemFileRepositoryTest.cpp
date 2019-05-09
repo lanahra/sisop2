@@ -166,7 +166,7 @@ TEST(SystemFileRepositoryTest, GetsStatus) {
     EXPECT_THAT(repository.getStatus("tenth"), Eq(entries));
 }
 
-TEST(SystemFileRepositoryTest, DoNotSaveEmptyStatus) {
+TEST(SystemFileRepositoryTest, SaveEmptyStatus) {
     system("rm -fr sync_dir_eleventh");
     system("mkdir -p sync_dir_eleventh");
 
@@ -174,7 +174,7 @@ TEST(SystemFileRepositoryTest, DoNotSaveEmptyStatus) {
     repository.saveStatus("eleventh", std::list<FileEntry>());
 
     struct stat st;
-    EXPECT_THAT(stat("sync_dir_eleventh/.status", &st), Not(Eq(0)));
+    EXPECT_THAT(stat("sync_dir_eleventh/.status", &st), Eq(0));
 }
 
 TEST(SystemFileRepositoryTest, SavesStatus) {
