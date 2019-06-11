@@ -3,6 +3,8 @@
 #include <memory>
 #include <sstream>
 #include <vector>
+#include <thread>
+#include "infra/synchronization/TemporalSynchronizer.h"
 #include "application/DefaultPrinterService.h"
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileCommandHandler.h"
@@ -63,7 +65,6 @@ int main(int argc, char** argv) {
 
     SyncEndpoints endpoints
         = SyncEndpoints::Builder()
-              .withListEntries("file.list.request", "sync.list.response")
               .withDownloadFile("file.download.request", "file.sync.response")
               .withRemoveFile("file.remove.request")
               .withUploadFile("file.upload.request")
@@ -114,7 +115,12 @@ int main(int argc, char** argv) {
     commandHandlers["get_sync_dir"] = syncCommandHandler;
 
     // start sync
-    syncCommandHandler->handle({}, *messageStreamer);
+    auto temporalSynchronizer
+            = std::make_shared<TemporalSynchronizer>(syncCommandHandler,
+                                                     *messageStreamer);
+    std::thread temporalSyncThread(&TemporalSynchronizer::start, temporalSynchronizer);
+    temporalSyncThread.detach();
+    // syncCommandHandler->handle({}, *messageStreamer);
 
     BlockingCommandListener commandListener(
         std::cin, listenerLoop, messageStreamer, commandHandlers);

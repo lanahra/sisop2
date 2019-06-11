@@ -4,23 +4,17 @@
 #include <string>
 
 class SyncEndpoints {
-    std::string listEntriesOperation;
-    std::string listEntriesResponse;
     std::string downloadFileOperation;
     std::string downloadFileResponse;
     std::string uploadFileOperation;
     std::string removeFileOperation;
 
   public:
-    SyncEndpoints(std::string listEntriesOperation,
-                  std::string listEntriesResponse,
-                  std::string downloadFileOperation,
+    SyncEndpoints(std::string downloadFileOperation,
                   std::string downloadFileResponse,
                   std::string uploadFileOperation,
                   std::string removeFileOperation)
-        : listEntriesOperation(listEntriesOperation),
-          listEntriesResponse(listEntriesResponse),
-          downloadFileOperation(downloadFileOperation),
+        : downloadFileOperation(downloadFileOperation),
           downloadFileResponse(downloadFileResponse),
           uploadFileOperation(uploadFileOperation),
           removeFileOperation(removeFileOperation){};
@@ -28,13 +22,6 @@ class SyncEndpoints {
   public:
     class Builder;
 
-    std::string getListEntriesOperation() const {
-        return listEntriesOperation;
-    }
-
-    std::string getListEntriesResponse() const {
-        return listEntriesResponse;
-    }
     std::string getDownloadFileOperation() const {
         return downloadFileOperation;
     }
@@ -50,8 +37,6 @@ class SyncEndpoints {
 };
 
 class SyncEndpoints::Builder {
-    std::string listEntriesOperation;
-    std::string listEntriesResponse;
     std::string downloadFileOperation;
     std::string downloadFileResponse;
     std::string uploadFileOperation;
@@ -59,12 +44,6 @@ class SyncEndpoints::Builder {
 
   public:
     Builder() = default;
-
-    Builder& withListEntries(std::string operation, std::string response) {
-        this->listEntriesOperation = operation;
-        this->listEntriesResponse = response;
-        return *this;
-    }
 
     Builder& withDownloadFile(std::string operation, std::string response) {
         this->downloadFileOperation = operation;
@@ -83,9 +62,7 @@ class SyncEndpoints::Builder {
     }
 
     SyncEndpoints build() {
-        return SyncEndpoints(listEntriesOperation,
-                             listEntriesResponse,
-                             downloadFileOperation,
+        return SyncEndpoints(downloadFileOperation,
                              downloadFileResponse,
                              uploadFileOperation,
                              removeFileOperation);

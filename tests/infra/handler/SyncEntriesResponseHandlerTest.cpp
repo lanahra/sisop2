@@ -26,7 +26,6 @@ TEST(SyncEntriesResponseHandlerTest, SendsSyncOperations) {
 
     SyncEndpoints endpoints
         = SyncEndpoints::Builder()
-              .withListEntries("list.operation", "list.response")
               .withDownloadFile("download.operation", "download.response")
               .withRemoveFile("remove.operation")
               .withUploadFile("upload.operation")

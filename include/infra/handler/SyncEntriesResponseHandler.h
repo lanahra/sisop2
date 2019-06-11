@@ -15,7 +15,6 @@ class SyncEntriesResponseHandler : public MessageHandler {
     std::list<Message> messagesFor(std::list<SyncOperation> operations);
     Message downloadMessageFor(std::string filename);
     Message deleteMessageFor(std::string filename);
-    Message listEntriesMessage();
     void sendMessages(std::list<Message> messages,
                       MessageStreamer& messageStreamer);
 

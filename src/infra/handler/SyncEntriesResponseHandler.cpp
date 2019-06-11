@@ -39,7 +39,7 @@ std::list<Message> SyncEntriesResponseHandler::messagesFor(
                 break;
         }
     }
-    messages.push_back(listEntriesMessage());
+    // messages.push_back(listEntriesMessage());
     return messages;
 }
 
@@ -65,12 +65,6 @@ Message SyncEntriesResponseHandler::deleteMessageFor(std::string filename) {
     std::stringstream serialized;
     serialized << request;
     return Message(endpoints.getRemoveFileOperation(), serialized.str());
-}
-
-Message SyncEntriesResponseHandler::listEntriesMessage() {
-    return Message(endpoints.getListEntriesOperation(),
-                   username,
-                   endpoints.getListEntriesResponse());
 }
 
 void SyncEntriesResponseHandler::sendMessages(
