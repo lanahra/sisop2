@@ -15,8 +15,14 @@
 #include "infra/repository/SystemFileRepository.h"
 #include "infra/synchronization/DefaultKeyLock.h"
 
+struct ServerDescription {
+    std::string address;
+    int port;
+};
+
 int main(int argc, char** argv) {
     int port;
+    struct ServerDescription primaryServer;
     if (argc < 2) {
         std::cout << "port number expected" << std::endl;
         exit(EXIT_FAILURE);
@@ -24,6 +30,16 @@ int main(int argc, char** argv) {
         std::stringstream arg;
         arg << argv[1];
         arg >> port;
+        if (argc == 4){ //Indica servidor backup (que passou o primario como entrada)
+            std::stringstream arg;
+            arg << argv[2];
+            primaryServer.address = arg.str();
+            arg.str("");
+            arg << argv[3];
+            arg >> primaryServer.port;
+            std::cout << "This is a backup server whose primary server is at "  << primaryServer.address << ":"
+                                                                                << primaryServer.port << std::endl;
+        }
     }
 
     SystemFileRepository fileRepository;
