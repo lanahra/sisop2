@@ -39,7 +39,6 @@ std::list<Message> SyncEntriesResponseHandler::messagesFor(
                 break;
         }
     }
-    // messages.push_back(listEntriesMessage());
     return messages;
 }
 

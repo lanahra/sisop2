@@ -117,10 +117,10 @@ int main(int argc, char** argv) {
     // start sync
     auto temporalSynchronizer
             = std::make_shared<TemporalSynchronizer>(syncCommandHandler,
-                                                     *messageStreamer);
+                                                     *messageStreamer,
+                                                     listenerLoop);
     std::thread temporalSyncThread(&TemporalSynchronizer::start, temporalSynchronizer);
     temporalSyncThread.detach();
-    // syncCommandHandler->handle({}, *messageStreamer);
 
     BlockingCommandListener commandListener(
         std::cin, listenerLoop, messageStreamer, commandHandlers);
