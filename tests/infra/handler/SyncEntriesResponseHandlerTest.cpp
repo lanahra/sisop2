@@ -48,8 +48,6 @@ TEST(SyncEntriesResponseHandlerTest, SendsSyncOperations) {
                 send(Message(
                     "upload.operation",
                     "4,name,5,three,1556249031,1556249031,1556249031,4,body")));
-    EXPECT_CALL(messageStreamer,
-                send(Message("list.operation", "name", "list.response")));
 
     handler.handle(response, messageStreamer);
 }
