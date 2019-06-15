@@ -37,7 +37,9 @@ set(SOURCES
         src/infra/repository/SystemFileRepository.cpp
         src/server/File.cpp
         src/server/DefaultUser.cpp
-        src/infra/synchronization/TemporalSynchronizer.cpp include/infra/synchronization/TemporalSynchronizer.h src/infra/handler/ListServerDirectoriesHandler.cpp include/infra/handler/ListServerDirectoriesHandler.h)
+        src/infra/synchronization/TemporalSynchronizer.cpp
+        src/infra/handler/ListServerDirectoriesHandler.cpp
+        )
 set(TESTFILES
         tests/application/DefaultUserServiceTest.cpp
         tests/application/DefaultPrinterServiceTest.cpp

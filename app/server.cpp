@@ -4,6 +4,7 @@
 #include <infra/messaging/SocketMessageStreamer.h>
 #include <infra/messaging/BlockingMessageListener.h>
 #include <infra/messaging/AsyncMessageListener.h>
+#include <infra/handler/ListServerDirectoriesHandler.h>
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
@@ -67,12 +68,15 @@ void runPrimaryServer(int port) {
 
     auto saveFileHandler = std::make_shared<SaveFileHandler>(userService);
 
+    auto listServerDirsHandler = std::make_shared<ListServerDirectoriesHandler>(fileRepository);
+
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
     handlers["file.list.request"] = listFileEntriesHandler;
     handlers["file.download.request"] = downloadFileHandler;
     handlers["file.remove.request"] = removeFileHandler;
     handlers["file.upload.request"] = saveFileHandler;
+    handlers["server.list.request"] = listServerDirsHandler;
 
     // factory for message listeners for every new connection
     OpenListenerLoop listenerLoop;
