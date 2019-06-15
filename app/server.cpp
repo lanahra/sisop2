@@ -1,6 +1,7 @@
 #include <map>
 #include <memory>
 #include <sstream>
+#include <infra/messaging/SocketMessageStreamer.h>
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
@@ -20,28 +21,15 @@ struct ServerDescription {
     int port;
 };
 
-int main(int argc, char** argv) {
-    int port;
-    struct ServerDescription primaryServer;
-    if (argc < 2) {
-        std::cout << "port number expected" << std::endl;
-        exit(EXIT_FAILURE);
-    } else {
-        std::stringstream arg;
-        arg << argv[1];
-        arg >> port;
-        if (argc == 4){ //Indica servidor backup (que passou o primario como entrada)
-            std::stringstream arg;
-            arg << argv[2];
-            primaryServer.address = arg.str();
-            arg.str("");
-            arg << argv[3];
-            arg >> primaryServer.port;
-            std::cout << "This is a backup server whose primary server is at "  << primaryServer.address << ":"
-                                                                                << primaryServer.port << std::endl;
-        }
-    }
+void runPrimaryServer(int port);
 
+void runBackupServer(struct ServerDescription primaryServer){
+    std::cout << "This is a backup server whose primary server is at "
+                << primaryServer.address << ":"
+                << primaryServer.port << std::endl;
+}
+
+void runPrimaryServer(int port) {
     SystemFileRepository fileRepository;
     DefaultUserRepository userRepository(fileRepository);
     DefaultKeyLock keyLock;
@@ -49,10 +37,10 @@ int main(int argc, char** argv) {
 
     // create handler for command.establish_session
     auto listFileEntriesHandler
-        = std::make_shared<ListFileEntriesHandler>(userService);
+            = std::make_shared<ListFileEntriesHandler>(userService);
 
     auto downloadFileHandler
-        = std::make_shared<DownloadFileHandler>(userService);
+            = std::make_shared<DownloadFileHandler>(userService);
 
     auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService);
 
@@ -74,3 +62,29 @@ int main(int argc, char** argv) {
     ConnectionListener connectionListener(socket, listenerLoop, factory);
     connectionListener.listen(port);
 }
+
+int main(int argc, char** argv) {
+    int port;
+    struct ServerDescription primaryServer;
+    if (argc < 2) {
+        std::cout << "port number expected" << std::endl;
+        exit(EXIT_FAILURE);
+    } else {
+        std::stringstream arg;
+        arg << argv[1];
+        arg >> port;
+        if (argc == 4) { //Indica servidor backup (que passou o primario como entrada)
+            std::stringstream arg;
+            arg << argv[2];
+            primaryServer.address = arg.str();
+            arg.str("");
+            arg << argv[3];
+            arg >> primaryServer.port;
+            runBackupServer(primaryServer);
+        }else{
+            runPrimaryServer(port);
+        }
+    }
+}
+
+
