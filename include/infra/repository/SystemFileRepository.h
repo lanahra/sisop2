@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <vector>
 #include "server/FileRepository.h"
 #include "server/Clock.h"
 
@@ -30,6 +31,8 @@ class SystemFileRepository : public FileRepository {
     std::list<FileEntry> getEntries(std::string dir) override;
     std::list<FileEntry> getStatus(std::string dir) override;
     void saveStatus(std::string dir, std::list<FileEntry> entries) override;
+
+    std::vector<std::string> getUsernamesFromSyncDirectories();
 };
 
 #endif

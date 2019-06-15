@@ -172,3 +172,24 @@ void SystemFileRepository::saveStatus(std::string dir,
     fileStream.close();
 }
 
+std::vector<std::string> SystemFileRepository::getUsernamesFromSyncDirectories(){
+    std::vector<std::string> usernames;
+
+    std::string dir = ".";
+    DIR* openDir = opendir(dir.c_str());
+    struct dirent* entry;
+
+    std::list<FileEntry> entries;
+    while ((entry = readdir(openDir)) != 0) {
+        std::string name(entry->d_name);
+        size_t index = name.find(PREFIX);
+        if (index != std::string::npos) {
+            name.erase(index, PREFIX.size());
+            usernames.push_back(name);
+        }
+    }
+    closedir(openDir);
+
+    return usernames;
+}
+

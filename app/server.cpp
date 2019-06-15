@@ -46,7 +46,7 @@ void runBackupServer(struct ServerDescription primaryServer){
     asyncMessageListener.listen();
 
     // first sync between backup and primary
-    Message message("server.list", "", "server.list.response");
+    Message message("server.list.request", "", "server.list.response");
     messageStreamer->send(message);
 }
 

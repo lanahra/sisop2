@@ -193,3 +193,19 @@ TEST(SystemFileRepositoryTest, SavesStatus) {
 
     EXPECT_THAT(status, Eq("5,first,10,20,30\n6,second,10,20,30\n"));
 }
+
+TEST(SystemFileRepositoryTest, getUsernamesFromSyncDirectories){
+    system("rm -fr *");
+    system("mkdir -p sync_dir_twelve");
+    system("mkdir -p twelve");
+
+
+    SystemFileRepository repository;
+    std::vector<std::string> usernames = repository.getUsernamesFromSyncDirectories();
+
+    std::vector<std::string> ground_truth;
+    ground_truth.push_back("twelve");
+
+    EXPECT_THAT(usernames.size(), Eq(ground_truth.size()));
+    EXPECT_THAT(usernames.front(), Eq(ground_truth.front()));
+}
