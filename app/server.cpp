@@ -2,6 +2,8 @@
 #include <memory>
 #include <sstream>
 #include <infra/messaging/SocketMessageStreamer.h>
+#include <infra/messaging/BlockingMessageListener.h>
+#include <infra/messaging/AsyncMessageListener.h>
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
@@ -27,6 +29,25 @@ void runBackupServer(struct ServerDescription primaryServer){
     std::cout << "This is a backup server whose primary server is at "
                 << primaryServer.address << ":"
                 << primaryServer.port << std::endl;
+
+    OpenListenerLoop listenerLoop;
+    auto socket = std::make_shared<TcpSocket>();
+    socket->connect(primaryServer.address, primaryServer.port);
+
+    auto messageStreamer = std::make_shared<SocketMessageStreamer>(socket);
+
+    // register handlers
+    std::map<std::string, std::shared_ptr<MessageHandler>> messageHandlers;
+
+    auto messageListener
+            = std::unique_ptr<BlockingMessageListener>(new BlockingMessageListener(
+                    messageStreamer, listenerLoop, messageHandlers));
+    AsyncMessageListener asyncMessageListener(std::move(messageListener));
+    asyncMessageListener.listen();
+
+    // first sync between backup and primary
+    Message message("server.list", "", "server.list.response");
+    messageStreamer->send(message);
 }
 
 void runPrimaryServer(int port) {
