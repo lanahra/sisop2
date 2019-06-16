@@ -28,6 +28,7 @@ public:
                                     const ListServerDirectoriesResponse& self) {
         out << self.usernames.size();
         for (std::string username : self.usernames) {
+            out << ',' << username.size();
             out << ',' << username;
         }
         return out;
@@ -38,8 +39,12 @@ public:
         in >> size;
         for (size_t i = 0; i < size; i++) {
             in.ignore(1, ',');
+            size_t username_size;
+            in >> username_size;
+            in.ignore(1, ',');
             std::string username;
-            in >> username;
+            username.resize(username_size);
+            in.read(&username[0], username_size);
             self.usernames.push_back(username);
         }
         return in;
