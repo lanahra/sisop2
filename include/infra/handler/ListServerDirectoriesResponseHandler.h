@@ -10,7 +10,7 @@ class ListServerDirectoriesResponseHandler : MessageHandler{
     UserService& userService;
 
   public:
-    ListServerDirectoriesResponseHandler(UserService& service) : userService(userService){};
+    ListServerDirectoriesResponseHandler(UserService& userService) : userService(userService){};
     void handle(Message message, MessageStreamer& messageStreamer) override;
 
     ListServerDirectoriesResponse deserializeMessage(std::string body);
