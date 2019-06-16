@@ -39,7 +39,7 @@ set(SOURCES
         src/server/DefaultUser.cpp
         src/infra/synchronization/TemporalSynchronizer.cpp
         src/infra/handler/ListServerDirectoriesHandler.cpp
-        )
+        src/infra/handler/ListServerDirectoriesResponseHandler.cpp include/infra/handler/ListServerDirectoriesResponseHandler.h)
 set(TESTFILES
         tests/application/DefaultUserServiceTest.cpp
         tests/application/DefaultPrinterServiceTest.cpp
