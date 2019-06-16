@@ -1,10 +1,6 @@
 #include <map>
 #include <memory>
 #include <sstream>
-#include <infra/messaging/SocketMessageStreamer.h>
-#include <infra/messaging/BlockingMessageListener.h>
-#include <infra/messaging/AsyncMessageListener.h>
-#include <infra/handler/ListServerDirectoriesHandler.h>
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
@@ -18,6 +14,10 @@
 #include "infra/repository/DefaultUserRepository.h"
 #include "infra/repository/SystemFileRepository.h"
 #include "infra/synchronization/DefaultKeyLock.h"
+#include "infra/messaging/SocketMessageStreamer.h"
+#include "infra/messaging/BlockingMessageListener.h"
+#include "infra/messaging/AsyncMessageListener.h"
+#include "infra/handler/ListServerDirectoriesHandler.h"
 
 struct ServerDescription {
     std::string address;

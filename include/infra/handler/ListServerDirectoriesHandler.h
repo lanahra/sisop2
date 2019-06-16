@@ -2,15 +2,15 @@
 #define SISOP2_LISTSERVERDIRECTORIESHANDLER_H
 
 
-#include <infra/messaging/MessageHandler.h>
-#include <infra/repository/SystemFileRepository.h>
+#include "infra/messaging/MessageHandler.h"
+#include "server/FileRepository.h"
 
 class ListServerDirectoriesHandler : public MessageHandler {
-    SystemFileRepository& systemFileRepository;
+    FileRepository& fileRepository;
 
   public:
-    ListServerDirectoriesHandler(SystemFileRepository& systemFileRepository)
-    : systemFileRepository(systemFileRepository){};
+    ListServerDirectoriesHandler(FileRepository& fileRepository)
+    : fileRepository(fileRepository){};
     void handle(Message message, MessageStreamer& messageStreamer) override;
 };
 

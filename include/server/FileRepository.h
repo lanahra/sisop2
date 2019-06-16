@@ -2,6 +2,7 @@
 #define FILE_REPOSITORY_H
 
 #include <list>
+#include <vector>
 #include "File.h"
 #include "FileEntry.h"
 
@@ -18,6 +19,7 @@ class FileRepository {
     virtual std::list<FileEntry> getEntries(std::string dir) = 0;
     virtual std::list<FileEntry> getStatus(std::string dir) = 0;
     virtual void saveStatus(std::string dir, std::list<FileEntry> entries) = 0;
+    virtual std::vector<std::string> getUsernamesFromSyncDirectories() = 0;
 };
 
 #endif

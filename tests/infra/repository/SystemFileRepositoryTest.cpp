@@ -9,6 +9,7 @@ using ::testing::IsEmpty;
 using ::testing::Not;
 using ::testing::Return;
 using ::testing::UnorderedElementsAre;
+using ::testing::Contains;
 
 TEST(SystemFileRepositoryTest, SavesFile) {
     system("mkdir -p sync_dir_first");
@@ -195,17 +196,12 @@ TEST(SystemFileRepositoryTest, SavesStatus) {
 }
 
 TEST(SystemFileRepositoryTest, getUsernamesFromSyncDirectories){
-    system("rm -fr *");
+    system("rm -fr sync_dir_twelve");
     system("mkdir -p sync_dir_twelve");
     system("mkdir -p twelve");
-
 
     SystemFileRepository repository;
     std::vector<std::string> usernames = repository.getUsernamesFromSyncDirectories();
 
-    std::vector<std::string> ground_truth;
-    ground_truth.push_back("twelve");
-
-    EXPECT_THAT(usernames.size(), Eq(ground_truth.size()));
-    EXPECT_THAT(usernames.front(), Eq(ground_truth.front()));
+    EXPECT_THAT(usernames, Contains("twelve"));
 }

@@ -14,6 +14,7 @@ class MockFileRepository : public FileRepository {
     MOCK_METHOD1(getEntries, std::list<FileEntry>(std::string));
     MOCK_METHOD1(getStatus, std::list<FileEntry>(std::string));
     MOCK_METHOD2(saveStatus, void(std::string, std::list<FileEntry>));
+    MOCK_METHOD0(getUsernamesFromSyncDirectories, std::vector<std::string>());
 };
 
 #endif
