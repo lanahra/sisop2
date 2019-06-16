@@ -31,7 +31,6 @@ class SystemFileRepository : public FileRepository {
     std::list<FileEntry> getEntries(std::string dir) override;
     std::list<FileEntry> getStatus(std::string dir) override;
     void saveStatus(std::string dir, std::list<FileEntry> entries) override;
-
     std::vector<std::string> getUsernamesFromSyncDirectories();
 };
 

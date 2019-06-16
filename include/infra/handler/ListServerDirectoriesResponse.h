@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include <ostream>
-#include <unordered_map>
+#include <iostream>
 
 class ListServerDirectoriesResponse {
     std::vector<std::string> usernames;
@@ -35,9 +35,9 @@ public:
 
     friend std::istream& operator>>(std::istream& in, ListServerDirectoriesResponse& self) {
         size_t size;
-        //in >> size;
+        in >> size;
         for (size_t i = 0; i < size; i++) {
-            //in.ignore(1, ',');
+            in.ignore(1, ',');
             std::string username;
             in >> username;
             self.usernames.push_back(username);
