@@ -15,7 +15,7 @@ TEST(ListFileEntriesHandlerTest, ListUserFileEntries) {
 
     MockMessageStreamer messageStreamer;
     Message response("file.list.response",
-                    "2,5,first,10,20,30,6,second,10,20,30");
+                    "4,name,2,5,first,10,20,30,6,second,10,20,30");
     EXPECT_CALL(messageStreamer, send(response));
 
     ListFileEntriesHandler handler(service);

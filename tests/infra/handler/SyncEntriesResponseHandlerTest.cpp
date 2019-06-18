@@ -34,7 +34,7 @@ TEST(SyncEntriesResponseHandlerTest, SendsSyncOperations) {
     SyncEntriesResponseHandler handler("name", endpoints, service);
 
     Message response("file.list.response",
-                     "2,5,first,1556249031,1556249031,1556249031,6,second,"
+                     "4,name,2,5,first,1556249031,1556249031,1556249031,6,second,"
                      "1556249031,1556249031,1556249031");
 
     MockMessageStreamer messageStreamer;
