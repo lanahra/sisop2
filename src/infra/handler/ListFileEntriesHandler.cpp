@@ -5,8 +5,9 @@
 
 void ListFileEntriesHandler::handle(Message message,
                                     MessageStreamer& messageStreamer) {
-    std::list<FileEntry> entries = service.listFileEntries(message.getBody());
-    ListFileEntriesResponse fileEntries(entries);
+    std::string username = message.getBody();
+    std::list<FileEntry> entries = service.listFileEntries(username);
+    ListFileEntriesResponse fileEntries(username, entries);
     std::stringstream serialized;
     serialized << fileEntries;
     Message response(message.getResponse(), serialized.str());
