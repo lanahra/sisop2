@@ -6,11 +6,10 @@
 #include <application/UserService.h>
 #include "ListServerDirectoriesResponse.h"
 
-class ListServerDirectoriesResponseHandler : MessageHandler{
-    UserService& userService;
+class ListServerDirectoriesResponseHandler : public MessageHandler{
 
   public:
-    ListServerDirectoriesResponseHandler(UserService& userService) : userService(userService){};
+    ListServerDirectoriesResponseHandler(){};
     void handle(Message message, MessageStreamer& messageStreamer) override;
 
     ListServerDirectoriesResponse deserializeMessage(std::string body);

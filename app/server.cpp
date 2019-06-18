@@ -1,6 +1,8 @@
 #include <map>
 #include <memory>
 #include <sstream>
+#include <infra/handler/ListServerDirectoriesResponse.h>
+#include <infra/handler/ListServerDirectoriesResponseHandler.h>
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
@@ -37,8 +39,11 @@ void runBackupServer(struct ServerDescription primaryServer){
 
     auto messageStreamer = std::make_shared<SocketMessageStreamer>(socket);
 
+    auto listServerDirsResponseHandler = std::make_shared<ListServerDirectoriesResponseHandler>();
+
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> messageHandlers;
+    messageHandlers["server.list.response"] = listServerDirsResponseHandler;
 
     auto messageListener
             = std::unique_ptr<BlockingMessageListener>(new BlockingMessageListener(
@@ -49,6 +54,10 @@ void runBackupServer(struct ServerDescription primaryServer){
     // first sync between backup and primary
     Message message("server.list.request", "", "server.list.response");
     messageStreamer->send(message);
+
+    while (listenerLoop.isOpen()){
+
+    }
 }
 
 void runPrimaryServer(int port) {

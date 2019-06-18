@@ -3,6 +3,7 @@
 #include <sstream>
 #include <infra/handler/ListServerDirectoriesResponse.h>
 #include <infra/handler/ListServerEntriesCommandHandler.h>
+#include <string>
 
 void ListServerDirectoriesResponseHandler::handle(Message message, MessageStreamer& messageStreamer) {
     ListServerDirectoriesResponse response = deserializeMessage(message.getBody());
