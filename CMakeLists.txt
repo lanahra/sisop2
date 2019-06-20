@@ -33,13 +33,15 @@ set(SOURCES
         src/infra/messaging/ConnectionListener.cpp
         src/infra/messaging/SocketMessageStreamer.cpp
         src/infra/messaging/TcpSocket.cpp
+        src/infra/messaging/ReconnectableTcpSocket.cpp
         src/infra/repository/DefaultUserRepository.cpp
         src/infra/repository/SystemFileRepository.cpp
         src/server/File.cpp
         src/server/DefaultUser.cpp
         src/infra/synchronization/TemporalSynchronizer.cpp
         src/infra/handler/ListServerDirectoriesHandler.cpp
-        src/infra/handler/ListServerDirectoriesResponseHandler.cpp include/infra/handler/ListServerDirectoriesResponseHandler.h)
+        src/infra/handler/ListServerDirectoriesResponseHandler.cpp
+        )
 set(TESTFILES
         tests/application/DefaultUserServiceTest.cpp
         tests/application/DefaultPrinterServiceTest.cpp

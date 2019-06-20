@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <thread>
+#include <signal.h>
 #include "infra/synchronization/TemporalSynchronizer.h"
 #include "application/DefaultPrinterService.h"
 #include "application/DefaultUserService.h"
@@ -26,7 +27,7 @@
 #include "infra/messaging/OpenListenerLoop.h"
 #include "infra/messaging/Socket.h"
 #include "infra/messaging/SocketMessageStreamer.h"
-#include "infra/messaging/TcpSocket.h"
+#include "infra/messaging/ReconnectableTcpSocket.h"
 #include "infra/repository/DefaultUserRepository.h"
 #include "infra/repository/SystemFileRepository.h"
 #include "infra/synchronization/DefaultKeyLock.h"
@@ -40,9 +41,12 @@ struct config {
 struct config parseArgs(int argc, char** argv);
 
 int main(int argc, char** argv) {
+    struct sigaction ignore = (struct sigaction){SIG_IGN};
+    sigaction(SIGPIPE, &ignore, nullptr);
+
     struct config config = parseArgs(argc, argv);
 
-    auto socket = std::make_shared<TcpSocket>();
+    auto socket = std::make_shared<ReconnectableTcpSocket>(4567, 5);
     socket->connect(config.address, config.port);
 
     auto messageStreamer = std::make_shared<SocketMessageStreamer>(socket);

@@ -3,6 +3,7 @@
 #include <sstream>
 
 Message SocketMessageStreamer::receive() {
+    std::unique_lock<std::mutex> lk(mutex);
     int length = socket->readInt();
     std::string serialized = socket->read(length);
     return messageFrom(serialized);

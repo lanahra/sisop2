@@ -28,6 +28,8 @@ class TcpSocket : public Socket {
     void writeInt(int n) override;
     void write(std::string s) override;
     void close() override;
+
+    void select(int timeout);
 };
 
 #endif
