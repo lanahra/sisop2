@@ -3,6 +3,10 @@
 #include <sstream>
 #include <infra/handler/ListServerDirectoriesResponse.h>
 #include <infra/handler/ListServerDirectoriesResponseHandler.h>
+#include <infra/handler/DownloadFileResponseHandler.h>
+#include <infra/handler/SyncFileResponseHandler.h>
+#include <infra/handler/SyncEndpoints.h>
+#include <infra/handler/SyncEntriesResponseHandler.h>
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
@@ -33,7 +37,12 @@ void runBackupServer(struct ServerDescription primaryServer){
                 << primaryServer.address << ":"
                 << primaryServer.port << std::endl;
 
+    SystemFileRepository fileRepository;
+    DefaultUserRepository userRepository(fileRepository);
+    DefaultKeyLock keyLock;
+    DefaultUserService userService(userRepository, fileRepository, keyLock);
     OpenListenerLoop listenerLoop;
+
     auto socket = std::make_shared<TcpSocket>();
     socket->connect(primaryServer.address, primaryServer.port);
 
@@ -41,9 +50,25 @@ void runBackupServer(struct ServerDescription primaryServer){
 
     auto listServerDirsResponseHandler = std::make_shared<ListServerDirectoriesResponseHandler>();
 
+    auto downloadFileResponseHandler
+            = std::make_shared<DownloadFileResponseHandler>(userService, std::cout);
+    auto syncFileResponseHandler = std::make_shared<SyncFileResponseHandler>(userService);
+
+    SyncEndpoints endpoints
+            = SyncEndpoints::Builder()
+                    .withDownloadFile("file.download.request", "file.sync.response")
+                    .withRemoveFile("file.remove.request")
+                    .withUploadFile("file.upload.request")
+                    .build();
+    auto syncEntriesResponseHandler
+            = std::make_shared<SyncEntriesResponseHandler>(endpoints, userService);
+
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> messageHandlers;
     messageHandlers["server.list.response"] = listServerDirsResponseHandler;
+    messageHandlers["file.download.response"] = downloadFileResponseHandler;
+    messageHandlers["file.sync.response"] = syncFileResponseHandler;
+    messageHandlers["sync.list.response"] = syncEntriesResponseHandler;
 
     auto messageListener
             = std::unique_ptr<BlockingMessageListener>(new BlockingMessageListener(
