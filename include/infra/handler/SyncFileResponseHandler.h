@@ -7,14 +7,12 @@
 #include "infra/messaging/MessageHandler.h"
 
 class SyncFileResponseHandler : public MessageHandler {
-    std::string username;
     UserService& service;
 
     DownloadFileResponse deserializeMessage(std::string body);
 
   public:
-    SyncFileResponseHandler(std::string username, UserService& service)
-        : username(username), service(service){};
+    SyncFileResponseHandler(UserService& service) : service(service){};
     void handle(Message message, MessageStreamer& messageStreamer) override;
 };
 

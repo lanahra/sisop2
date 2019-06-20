@@ -60,8 +60,7 @@ int main(int argc, char** argv) {
         = std::make_shared<ListServerEntriesResponseHandler>(printerService);
     auto downloadFileResponseHandler
         = std::make_shared<DownloadFileResponseHandler>(userService, std::cout);
-    auto syncFileResponseHandler = std::make_shared<SyncFileResponseHandler>(
-        config.username, userService);
+    auto syncFileResponseHandler = std::make_shared<SyncFileResponseHandler>(userService);
 
     SyncEndpoints endpoints
         = SyncEndpoints::Builder()

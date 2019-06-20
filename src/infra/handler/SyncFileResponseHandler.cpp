@@ -9,7 +9,7 @@ void SyncFileResponseHandler::handle(Message message,
     std::ignore = messageStreamer;
     DownloadFileResponse response = deserializeMessage(message.getBody());
     if (response.hasFile()) {
-        service.saveFile(username, response.getFile());
+        service.saveFile(response.getUsername(), response.getFile());
     }
 }
 
