@@ -70,8 +70,7 @@ int main(int argc, char** argv) {
               .withUploadFile("file.upload.request")
               .build();
     auto syncEntriesResponseHandler
-        = std::make_shared<SyncEntriesResponseHandler>(
-            config.username, endpoints, userService);
+        = std::make_shared<SyncEntriesResponseHandler>(endpoints, userService);
 
     std::map<std::string, std::shared_ptr<MessageHandler>> messageHandlers;
     messageHandlers["file.list.response"] = listServerResponseHandler;

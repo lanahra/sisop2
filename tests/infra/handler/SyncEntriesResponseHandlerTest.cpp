@@ -31,7 +31,7 @@ TEST(SyncEntriesResponseHandlerTest, SendsSyncOperations) {
               .withUploadFile("upload.operation")
               .build();
 
-    SyncEntriesResponseHandler handler("name", endpoints, service);
+    SyncEntriesResponseHandler handler(endpoints, service);
 
     Message response("file.list.response",
                      "4,name,2,5,first,1556249031,1556249031,1556249031,6,second,"
