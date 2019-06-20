@@ -20,9 +20,9 @@ DownloadFileRequest DownloadFileHandler::deserializeRequest(std::string body) {
 DownloadFileResponse DownloadFileHandler::handle(DownloadFileRequest request) {
     try {
         File file = tryToGetFile(request);
-        return DownloadFileResponse(file);
+        return DownloadFileResponse(request.getUsername(), file);
     } catch (const FileNotFoundException& e) {
-        return DownloadFileResponse();
+        return DownloadFileResponse(request.getUsername());
     }
 }
 File DownloadFileHandler::tryToGetFile(DownloadFileRequest request) {

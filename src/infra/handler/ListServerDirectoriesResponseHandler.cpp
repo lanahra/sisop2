@@ -10,7 +10,7 @@ void ListServerDirectoriesResponseHandler::handle(Message message, MessageStream
     std::vector<std::string> usernames = response.getUsernames();
     for(std::string username : usernames){
         ListServerEntriesCommandHandler syncHandler = ListServerEntriesCommandHandler(
-                        username, "file.list.request", "backup.file.list.response");
+                        username, "file.list.request", "file.list.response");
         syncHandler.handle({}, messageStreamer);
     }
 }

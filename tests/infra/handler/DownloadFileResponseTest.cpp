@@ -5,27 +5,27 @@
 using ::testing::Eq;
 
 TEST(DownloadFileResponseTest, SerializesResponseForNotFound) {
-    DownloadFileResponse response;
+    DownloadFileResponse response("username");
 
     std::stringstream serialized;
     serialized << response;
 
-    EXPECT_THAT(serialized.str(), Eq("0"));
+    EXPECT_THAT(serialized.str(), Eq("8,username,0"));
 }
 
 
 TEST(DownloadFileResponseTest, SerializesResponseForFileFound) {
     File file("name", Timestamps(10,20,30), "body");
-    DownloadFileResponse response(file);
+    DownloadFileResponse response("username", file);
 
     std::stringstream serialized;
     serialized << response;
 
-    EXPECT_THAT(serialized.str(), Eq("1,4,name,10,20,30,4,body"));
+    EXPECT_THAT(serialized.str(), Eq("8,username,1,4,name,10,20,30,4,body"));
 }
 
 TEST(DownloadFileResponseTest, DeserializesResponseForNotFound) {
-    std::stringstream serialized("0");
+    std::stringstream serialized("8,username,0");
 
     DownloadFileResponse response;
     serialized >> response;
@@ -34,7 +34,7 @@ TEST(DownloadFileResponseTest, DeserializesResponseForNotFound) {
 }
 
 TEST(DownloadFileResponseTest, DeserializesResponseForFileFound) {
-    std::stringstream serialized("1,4,name,10,20,30,4,body");
+    std::stringstream serialized("8,username,1,4,name,10,20,30,4,body");
     
     DownloadFileResponse response;
     serialized >> response;
