@@ -33,6 +33,7 @@ set(SOURCES
         src/infra/messaging/ConnectionListener.cpp
         src/infra/messaging/SocketMessageStreamer.cpp
         src/infra/messaging/TcpSocket.cpp
+        src/infra/messaging/ReconnectableTcpSocket.cpp
         src/infra/repository/DefaultUserRepository.cpp
         src/infra/repository/SystemFileRepository.cpp
         src/server/File.cpp
