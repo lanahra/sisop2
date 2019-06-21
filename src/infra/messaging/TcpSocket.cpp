@@ -102,3 +102,21 @@ void TcpSocket::write(void* buffer, int length) {
 void TcpSocket::close() {
     ::close(socket_);
 }
+
+void TcpSocket::select(int timeout) {
+    fd_set readfds;
+    FD_ZERO(&readfds);
+    FD_SET(socket_, &readfds);
+
+    struct timeval tv;
+    tv.tv_sec = timeout;
+    tv.tv_usec = 0;
+
+    int fds = ::select(socket_ + 1, &readfds, 0, 0, &tv);
+
+    if (fds < 0) {
+        throw SocketException(std::strerror(errno));
+    } else if (fds == 0) {
+        throw SocketException("Socket select timed out");
+    }
+}
