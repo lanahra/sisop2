@@ -9,7 +9,8 @@
 
 class SocketMessageStreamer : public MessageStreamer {
     std::shared_ptr<Socket> socket;
-    std::mutex mutex;
+    std::mutex readMutex;
+    std::mutex writeMutex;
 
     Message messageFrom(std::string serialized);
     std::string serializedFrom(Message message);

@@ -1,12 +1,14 @@
 #ifndef RECONNECTABLE_TCP_SOCKET_H
 #define RECONNECTABLE_TCP_SOCKET_H
 
+#include <mutex>
 #include "Socket.h"
 
 class ReconnectableTcpSocket : public Socket {
     std::shared_ptr<Socket> socket;
     int reconnectionPort;
     int reconnectionTimeout;
+    std::mutex reconnectionMutex;
 
     void waitForReconnection();
 
