@@ -7,6 +7,7 @@
 #include <infra/handler/SyncFileResponseHandler.h>
 #include <infra/handler/SyncEndpoints.h>
 #include <infra/handler/SyncEntriesResponseHandler.h>
+#include <infra/handler/ListServerDirectoriesRequest.h>
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
@@ -84,7 +85,10 @@ void runBackupServer(struct ServerDescription itself, struct ServerDescription p
     asyncMessageListener.listen();
 
     // first sync between backup and primary
-    Message message("server.list.request", "", "server.list.response");
+    ListServerDirectoriesRequest listServerDirectoriesRequest(itself.address, itself.port);
+    std::stringstream serialized;
+    serialized << listServerDirectoriesRequest;
+    Message message("server.list.request", serialized.str(), "server.list.response");
     messageStreamer->send(message);
 
     while (listenerLoop.isOpen()){
@@ -133,7 +137,7 @@ void runPrimaryServer(int port) {
 int main(int argc, char** argv) {
     struct ServerDescription primaryServer, itself;
     if (argc < 2) {
-        std::cout << "port number expected" << std::endl;
+        std::cout << "address and port number expected" << std::endl;
         exit(EXIT_FAILURE);
     } else {
         std::stringstream arg;
@@ -142,7 +146,6 @@ int main(int argc, char** argv) {
         arg.str("");
         arg << argv[2];
         arg >> itself.port;
-        std::cout << itself.address << ":" << itself.port << std::endl;
         if (argc == 5) { //Indica servidor backup (que passou o primario como entrada)
             std::stringstream arg;
             arg << argv[3];

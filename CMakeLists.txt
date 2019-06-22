@@ -57,6 +57,7 @@ set(TESTFILES
         tests/infra/handler/ListClientEntriesCommandHandlerTest.cpp
         tests/infra/handler/ListServerEntriesCommandHandlerTest.cpp
         tests/infra/handler/ListServerEntriesResponseHandlerTest.cpp
+        tests/infra/handler/ListServerDirectoriesRequestTest.cpp
         tests/infra/handler/ListServerDirectoriesResponseTest.cpp
         tests/infra/handler/RemoveFileRequestTest.cpp
         tests/infra/handler/RemoveFileHandlerTest.cpp
