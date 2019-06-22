@@ -5,6 +5,8 @@
 #include <tuple>
 
 void SaveFileHandler::handle(Message message, MessageStreamer& socket) {
+    replicaManagers.broadcast(message);
+
     std::ignore = socket;
     std::stringstream serialized(message.getBody());
     UploadFileRequest request;

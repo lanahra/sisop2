@@ -4,6 +4,8 @@
 #include "infra/handler/RemoveFileRequest.h"
 
 void RemoveFileHandler::handle(Message message, MessageStreamer& socket) {
+    replicaManagers.broadcast(message);
+
     std::ignore = socket;
     std::stringstream serialized(message.getBody());
     RemoveFileRequest request;

@@ -98,11 +98,11 @@ void runPrimaryServer(int port) {
     auto downloadFileHandler
             = std::make_shared<DownloadFileHandler>(userService);
 
-    auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService);
-
-    auto saveFileHandler = std::make_shared<SaveFileHandler>(userService);
-
     ReplicaManagers replicaManagers;
+    auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService, replicaManagers);
+
+    auto saveFileHandler = std::make_shared<SaveFileHandler>(userService, replicaManagers);
+
     auto listServerDirsHandler = std::make_shared<ListServerDirectoriesHandler>(fileRepository, replicaManagers);
 
     // register handlers
