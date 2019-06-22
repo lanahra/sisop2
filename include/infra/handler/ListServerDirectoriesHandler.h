@@ -2,15 +2,17 @@
 #define SISOP2_LISTSERVERDIRECTORIESHANDLER_H
 
 
+#include <server/ReplicaManagers.h>
 #include "infra/messaging/MessageHandler.h"
 #include "server/FileRepository.h"
 
 class ListServerDirectoriesHandler : public MessageHandler {
     FileRepository& fileRepository;
+    std::shared_ptr<ReplicaManagers> replicaManagers;
 
   public:
-    ListServerDirectoriesHandler(FileRepository& fileRepository)
-    : fileRepository(fileRepository){};
+    ListServerDirectoriesHandler(FileRepository& fileRepository, std::shared_ptr<ReplicaManagers> replicaManagers)
+    : fileRepository(fileRepository), replicaManagers(replicaManagers){};
     void handle(Message message, MessageStreamer& messageStreamer) override;
 };
 

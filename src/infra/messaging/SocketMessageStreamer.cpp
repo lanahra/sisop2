@@ -32,3 +32,7 @@ std::string SocketMessageStreamer::serializedFrom(Message message) {
 void SocketMessageStreamer::close() {
     socket->close();
 }
+
+std::shared_ptr<Socket> SocketMessageStreamer::getSocket() {
+    return socket;
+}

@@ -10,6 +10,7 @@ class MockMessageStreamer : public MessageStreamer {
     MOCK_METHOD0(receive, Message());
     MOCK_METHOD1(send, void(Message));
     MOCK_METHOD0(close, void());
+    MOCK_METHOD0(getSocket, std::shared_ptr<Socket>());
 };
 
 #endif

@@ -102,7 +102,8 @@ void runPrimaryServer(int port) {
 
     auto saveFileHandler = std::make_shared<SaveFileHandler>(userService);
 
-    auto listServerDirsHandler = std::make_shared<ListServerDirectoriesHandler>(fileRepository);
+    auto replicaManagers = std::shared_ptr<ReplicaManagers>();
+    auto listServerDirsHandler = std::make_shared<ListServerDirectoriesHandler>(fileRepository, replicaManagers);
 
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;

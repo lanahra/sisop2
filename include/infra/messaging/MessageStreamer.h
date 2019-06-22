@@ -2,6 +2,7 @@
 #define MESSAGE_STREAMER_H
 
 #include "Message.h"
+#include "Socket.h"
 
 class MessageStreamer {
   public:
@@ -9,6 +10,7 @@ class MessageStreamer {
     virtual Message receive() = 0;
     virtual void send(Message message) = 0;
     virtual void close() = 0;
+    virtual std::shared_ptr<Socket> getSocket() = 0;
 };
 
 #endif
