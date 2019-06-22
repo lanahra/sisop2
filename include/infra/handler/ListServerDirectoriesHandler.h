@@ -8,10 +8,10 @@
 
 class ListServerDirectoriesHandler : public MessageHandler {
     FileRepository& fileRepository;
-    std::shared_ptr<ReplicaManagers> replicaManagers;
+    ReplicaManagers& replicaManagers;
 
   public:
-    ListServerDirectoriesHandler(FileRepository& fileRepository, std::shared_ptr<ReplicaManagers> replicaManagers)
+    ListServerDirectoriesHandler(FileRepository& fileRepository, ReplicaManagers& replicaManagers)
     : fileRepository(fileRepository), replicaManagers(replicaManagers){};
     void handle(Message message, MessageStreamer& messageStreamer) override;
 };

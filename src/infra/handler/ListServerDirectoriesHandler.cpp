@@ -3,7 +3,7 @@
 #include <sstream>
 
 void ListServerDirectoriesHandler::handle(Message message, MessageStreamer &messageStreamer) {
-    replicaManagers->addSocket(messageStreamer.getSocket());
+    replicaManagers.addSocket(messageStreamer.getSocket());
 
     std::vector<std::string> usernames = fileRepository.getUsernamesFromSyncDirectories();
     ListServerDirectoriesResponse listServerDirectoriesResponse(usernames);
