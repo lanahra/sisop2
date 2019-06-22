@@ -1,7 +1,9 @@
 #include "infra/messaging/ReconnectableTcpSocket.h"
 #include "infra/messaging/SocketException.h"
 #include "infra/messaging/TcpSocket.h"
+#include <chrono>
 #include <iostream>
+#include <thread>
 
 ReconnectableTcpSocket::ReconnectableTcpSocket(int reconnectionPort,
                                                int reconnectionTimeout)
@@ -69,18 +71,23 @@ void ReconnectableTcpSocket::write(std::string s) {
 }
 
 void ReconnectableTcpSocket::waitForReconnection() {
-    std::cout << "Waiting for reconnection..." << std::endl;
-    TcpSocket reconnectionSocket;
-    reconnectionSocket.listen(reconnectionPort);
-    try {
-        reconnectionSocket.select(reconnectionTimeout);
-    } catch (const SocketException& e) {
-        std::clog << e.what() << std::endl;
-        std::clog.flush();
-        exit(EXIT_FAILURE);
+    if (reconnectionMutex.try_lock()) {
+        std::cout << "Waiting for reconnection..." << std::endl;
+        TcpSocket reconnectionSocket;
+        reconnectionSocket.listen(reconnectionPort);
+        try {
+            reconnectionSocket.select(reconnectionTimeout);
+        } catch (const SocketException& e) {
+            std::clog << e.what() << std::endl;
+            std::clog.flush();
+            exit(EXIT_FAILURE);
+        }
+        socket = reconnectionSocket.accept();
+        reconnectionSocket.close();
+        reconnectionMutex.unlock();
+    } else {
+        std::this_thread::sleep_for(std::chrono::seconds(reconnectionTimeout));
     }
-    socket = reconnectionSocket.accept();
-    reconnectionSocket.close();
 }
 
 void ReconnectableTcpSocket::close() {
