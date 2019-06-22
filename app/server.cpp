@@ -63,12 +63,19 @@ void runBackupServer(struct ServerDescription primaryServer){
     auto syncEntriesResponseHandler
             = std::make_shared<SyncEntriesResponseHandler>(endpoints, userService);
 
+    ReplicaManagers replicaManagers;
+    auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService, replicaManagers);
+
+    auto saveFileHandler = std::make_shared<SaveFileHandler>(userService, replicaManagers);
+
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> messageHandlers;
     messageHandlers["server.list.response"] = listServerDirsResponseHandler;
     messageHandlers["file.download.response"] = downloadFileResponseHandler;
     messageHandlers["file.sync.response"] = syncFileResponseHandler;
     messageHandlers["sync.list.response"] = syncEntriesResponseHandler;
+    messageHandlers["file.remove.request"] = removeFileHandler;
+    messageHandlers["file.upload.request"] = saveFileHandler;
 
     auto messageListener
             = std::unique_ptr<BlockingMessageListener>(new BlockingMessageListener(
