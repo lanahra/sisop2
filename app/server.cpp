@@ -32,7 +32,7 @@ struct ServerDescription {
 
 void runPrimaryServer(int port);
 
-void runBackupServer(struct ServerDescription primaryServer){
+void runBackupServer(struct ServerDescription itself, struct ServerDescription primaryServer){
     std::cout << "This is a backup server whose primary server is at "
                 << primaryServer.address << ":"
                 << primaryServer.port << std::endl;
@@ -131,25 +131,28 @@ void runPrimaryServer(int port) {
 }
 
 int main(int argc, char** argv) {
-    int port;
-    struct ServerDescription primaryServer;
+    struct ServerDescription primaryServer, itself;
     if (argc < 2) {
         std::cout << "port number expected" << std::endl;
         exit(EXIT_FAILURE);
     } else {
         std::stringstream arg;
         arg << argv[1];
-        arg >> port;
-        if (argc == 4) { //Indica servidor backup (que passou o primario como entrada)
+        itself.address = arg.str();
+        arg.str("");
+        arg << argv[2];
+        arg >> itself.port;
+        std::cout << itself.address << ":" << itself.port << std::endl;
+        if (argc == 5) { //Indica servidor backup (que passou o primario como entrada)
             std::stringstream arg;
-            arg << argv[2];
+            arg << argv[3];
             primaryServer.address = arg.str();
             arg.str("");
-            arg << argv[3];
+            arg << argv[4];
             arg >> primaryServer.port;
-            runBackupServer(primaryServer);
+            runBackupServer(itself, primaryServer);
         }else{
-            runPrimaryServer(port);
+            runPrimaryServer(itself.port);
         }
     }
 }
