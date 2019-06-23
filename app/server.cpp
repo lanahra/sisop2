@@ -26,6 +26,7 @@
 #include "infra/messaging/AsyncMessageListener.h"
 #include "infra/handler/ListServerDirectoriesHandler.h"
 #include <../include/server/ServerDescription.h>
+#include <infra/handler/UpdateBackupsListHandler.h>
 
 void runPrimaryServer(int port);
 
@@ -60,10 +61,12 @@ void runBackupServer(struct ServerDescription itself, struct ServerDescription p
     auto syncEntriesResponseHandler
             = std::make_shared<SyncEntriesResponseHandler>(endpoints, userService);
 
-    ReplicaManagers replicaManagers;
-    auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService, replicaManagers);
+    ReplicaManagers emptyReplicaManagers, replicaManagers;
+    auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService, emptyReplicaManagers);
 
-    auto saveFileHandler = std::make_shared<SaveFileHandler>(userService, replicaManagers);
+    auto saveFileHandler = std::make_shared<SaveFileHandler>(userService, emptyReplicaManagers);
+
+    auto updateBackupsListHandler = std::make_shared<UpdateBackupsListHandler>(replicaManagers);
 
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> messageHandlers;
@@ -73,6 +76,8 @@ void runBackupServer(struct ServerDescription itself, struct ServerDescription p
     messageHandlers["sync.list.response"] = syncEntriesResponseHandler;
     messageHandlers["file.remove.request"] = removeFileHandler;
     messageHandlers["file.upload.request"] = saveFileHandler;
+    messageHandlers["backup.servers.update"] = updateBackupsListHandler;
+
 
     auto messageListener
             = std::unique_ptr<BlockingMessageListener>(new BlockingMessageListener(

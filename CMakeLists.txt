@@ -24,6 +24,7 @@ set(SOURCES
         src/infra/handler/SaveFileHandler.cpp
         src/infra/handler/SyncFileResponseHandler.cpp
         src/infra/handler/SyncEntriesResponseHandler.cpp
+        src/infra/handler/UpdateBackupsListHandler.cpp
         src/infra/synchronization/DefaultKeyLock.cpp
         src/infra/synchronization/ReadWriteLock.cpp
         src/infra/messaging/AsyncMessageListener.cpp
@@ -80,6 +81,7 @@ set(TESTFILES
         tests/server/TimestampsTest.cpp
         tests/server/DefaultUserTest.cpp
         tests/server/ReplicaManagersTest.cpp
+        tests/infra/handler/UpdateBackupsListRequestTest.cpp
         )
 
 add_library(engine ${SOURCES})

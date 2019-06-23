@@ -8,6 +8,7 @@ void ListServerDirectoriesHandler::handle(Message message, MessageStreamer &mess
     std::cout << "Chegou primeiro request de " << request.getAddress() << ":" << request.getPort() << std::endl;
     replicaManagers.addSocket(messageStreamer.getSocket());
     replicaManagers.addBackupServerDescription(request.getAddress(), request.getPort());
+    replicaManagers.broadcastNewBackupsList();
 
     std::vector<std::string> usernames = fileRepository.getUsernamesFromSyncDirectories();
     ListServerDirectoriesResponse listServerDirectoriesResponse(usernames);
