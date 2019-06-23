@@ -62,7 +62,7 @@ void runBackupServer(struct ServerDescription itself, struct ServerDescription p
     auto syncEntriesResponseHandler
             = std::make_shared<SyncEntriesResponseHandler>(endpoints, userService);
 
-    ReplicaManagers emptyReplicaManagers, replicaManagers;
+    ReplicaManagers emptyReplicaManagers(false), replicaManagers(false);
     auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService, emptyReplicaManagers);
 
     auto saveFileHandler = std::make_shared<SaveFileHandler>(userService, emptyReplicaManagers);
@@ -101,7 +101,8 @@ void runBackupServer(struct ServerDescription itself, struct ServerDescription p
     }
 }
 
-void runPrimaryServer(int port) {
+void runServer(struct ServerDescription itself, struct ServerDescription primaryServer) {
+    bool isPrimary = (itself.address == primaryServer.address && itself.port == primaryServer.port);
     SystemFileRepository fileRepository;
     DefaultUserRepository userRepository(fileRepository);
     DefaultKeyLock keyLock;
@@ -115,7 +116,7 @@ void runPrimaryServer(int port) {
     auto downloadFileHandler
             = std::make_shared<DownloadFileHandler>(userService);
 
-    ReplicaManagers replicaManagers;
+    ReplicaManagers replicaManagers(isPrimary);
     auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService, replicaManagers);
 
     auto saveFileHandler = std::make_shared<SaveFileHandler>(userService, replicaManagers);
@@ -140,7 +141,7 @@ void runPrimaryServer(int port) {
     // starts listening for connections
     TcpSocket socket;
     ConnectionListener connectionListener(socket, listenerLoop, factory);
-    connectionListener.listen(port);
+    connectionListener.listen(itself.port);
 }
 
 int main(int argc, char** argv) {
@@ -166,7 +167,7 @@ int main(int argc, char** argv) {
             runBackupServer(itself, primaryServer);
 
         }else{
-            runPrimaryServer(itself.port);
+            runServer(itself, itself);
         }
     }
 }
