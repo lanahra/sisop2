@@ -4,10 +4,10 @@
 #include <infra/handler/ListServerDirectoriesRequest.h>
 
 void ListServerDirectoriesHandler::handle(Message message, MessageStreamer &messageStreamer) {
-    replicaManagers.addSocket(messageStreamer.getSocket());
-
     ListServerDirectoriesRequest request = deserializeMessage(message.getBody());
     std::cout << "Chegou primeiro request de " << request.getAddress() << ":" << request.getPort() << std::endl;
+    replicaManagers.addSocket(messageStreamer.getSocket());
+    replicaManagers.addBackupServerDescription(request.getAddress(), request.getPort());
 
     std::vector<std::string> usernames = fileRepository.getUsernamesFromSyncDirectories();
     ListServerDirectoriesResponse listServerDirectoriesResponse(usernames);

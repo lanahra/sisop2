@@ -25,11 +25,7 @@
 #include "infra/messaging/BlockingMessageListener.h"
 #include "infra/messaging/AsyncMessageListener.h"
 #include "infra/handler/ListServerDirectoriesHandler.h"
-
-struct ServerDescription {
-    std::string address;
-    int port;
-};
+#include <../include/server/ServerDescription.h>
 
 void runPrimaryServer(int port);
 

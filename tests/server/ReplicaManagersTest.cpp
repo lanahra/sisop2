@@ -11,3 +11,13 @@ TEST(ReplicaManagersTest, AddSocket) {
     replicaManagers.addSocket(aSocket);
     EXPECT_THAT(replicaManagers.getSockets().size(), Eq(1));
 }
+
+TEST(ReplicaManagersTest, AddServerDescription) {
+    ReplicaManagers replicaManagers = ReplicaManagers();
+    replicaManagers.addBackupServerDescription("127.0.0.1", 45120);
+    struct ServerDescription serverDescription;
+    serverDescription = replicaManagers.getBackupsDescriptions().front();
+
+    EXPECT_THAT(serverDescription.address, Eq("127.0.0.1"));
+    EXPECT_THAT(serverDescription.port, Eq(45120));
+}

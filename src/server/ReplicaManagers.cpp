@@ -7,3 +7,11 @@ void ReplicaManagers::broadcast(Message message) {
         messageStreamer->send(message);
     }
 }
+
+void ReplicaManagers::addBackupServerDescription(std::string address, int port){
+    struct ServerDescription newServerDescription;
+    newServerDescription.address = address;
+    newServerDescription.port = port;
+    backupsDescriptions.push_back(newServerDescription);
+}
+
