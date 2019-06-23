@@ -5,6 +5,7 @@
 #include <server/ReplicaManagers.h>
 #include "infra/messaging/MessageHandler.h"
 #include "server/FileRepository.h"
+#include "ListServerDirectoriesRequest.h"
 
 class ListServerDirectoriesHandler : public MessageHandler {
     FileRepository& fileRepository;
@@ -14,6 +15,8 @@ class ListServerDirectoriesHandler : public MessageHandler {
     ListServerDirectoriesHandler(FileRepository& fileRepository, ReplicaManagers& replicaManagers)
     : fileRepository(fileRepository), replicaManagers(replicaManagers){};
     void handle(Message message, MessageStreamer& messageStreamer) override;
+
+    ListServerDirectoriesRequest deserializeMessage(std::string body);
 };
 
 

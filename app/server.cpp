@@ -7,6 +7,7 @@
 #include <infra/handler/SyncFileResponseHandler.h>
 #include <infra/handler/SyncEndpoints.h>
 #include <infra/handler/SyncEntriesResponseHandler.h>
+#include <infra/handler/ListServerDirectoriesRequest.h>
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
@@ -25,15 +26,12 @@
 #include "infra/messaging/BlockingMessageListener.h"
 #include "infra/messaging/AsyncMessageListener.h"
 #include "infra/handler/ListServerDirectoriesHandler.h"
-
-struct ServerDescription {
-    std::string address;
-    int port;
-};
+#include <../include/server/ServerDescription.h>
+#include <infra/handler/UpdateBackupsListHandler.h>
 
 void runPrimaryServer(int port);
 
-void runBackupServer(struct ServerDescription primaryServer){
+void runBackupServer(struct ServerDescription itself, struct ServerDescription primaryServer){
     std::cout << "This is a backup server whose primary server is at "
                 << primaryServer.address << ":"
                 << primaryServer.port << std::endl;
@@ -64,10 +62,14 @@ void runBackupServer(struct ServerDescription primaryServer){
     auto syncEntriesResponseHandler
             = std::make_shared<SyncEntriesResponseHandler>(endpoints, userService);
 
-    ReplicaManagers replicaManagers;
-    auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService, replicaManagers);
+    ReplicaManagers emptyReplicaManagers, replicaManagers;
+    auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService, emptyReplicaManagers);
 
-    auto saveFileHandler = std::make_shared<SaveFileHandler>(userService, replicaManagers);
+    auto saveFileHandler = std::make_shared<SaveFileHandler>(userService, emptyReplicaManagers);
+
+    auto updateBackupsListHandler = std::make_shared<UpdateBackupsListHandler>(replicaManagers);
+
+    auto ipClientHandler = std::make_shared<IpClientHandler>(emptyReplicaManagers);
 
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> messageHandlers;
@@ -77,6 +79,9 @@ void runBackupServer(struct ServerDescription primaryServer){
     messageHandlers["sync.list.response"] = syncEntriesResponseHandler;
     messageHandlers["file.remove.request"] = removeFileHandler;
     messageHandlers["file.upload.request"] = saveFileHandler;
+    messageHandlers["backup.servers.update"] = updateBackupsListHandler;
+    messageHandlers["server.ip.request"] = ipClientHandler;
+
 
     auto messageListener
             = std::unique_ptr<BlockingMessageListener>(new BlockingMessageListener(
@@ -85,7 +90,10 @@ void runBackupServer(struct ServerDescription primaryServer){
     asyncMessageListener.listen();
 
     // first sync between backup and primary
-    Message message("server.list.request", "", "server.list.response");
+    ListServerDirectoriesRequest listServerDirectoriesRequest(itself.address, itself.port);
+    std::stringstream serialized;
+    serialized << listServerDirectoriesRequest;
+    Message message("server.list.request", serialized.str(), "server.list.response");
     messageStreamer->send(message);
 
     while (listenerLoop.isOpen()){
@@ -114,7 +122,7 @@ void runPrimaryServer(int port) {
 
     auto listServerDirsHandler = std::make_shared<ListServerDirectoriesHandler>(fileRepository, replicaManagers);
 
-    auto ipClientHandler = std::make_shared<IpClientHandler>();
+    auto ipClientHandler = std::make_shared<IpClientHandler>(replicaManagers);
 
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
@@ -136,26 +144,29 @@ void runPrimaryServer(int port) {
 }
 
 int main(int argc, char** argv) {
-    int port;
-    struct ServerDescription primaryServer;
+    struct ServerDescription primaryServer, itself;
     if (argc < 2) {
-        std::cout << "port number expected" << std::endl;
+        std::cout << "address and port number expected" << std::endl;
         exit(EXIT_FAILURE);
     } else {
         std::stringstream arg;
         arg << argv[1];
-        arg >> port;
-        if (argc == 4) { //Indica servidor backup (que passou o primario como entrada)
+        itself.address = arg.str();
+        arg.str("");
+        arg << argv[2];
+        arg >> itself.port;
+        if (argc == 5) { //Indica servidor backup (que passou o primario como entrada)
             std::stringstream arg;
-            arg << argv[2];
+            arg << argv[3];
             primaryServer.address = arg.str();
             arg.str("");
-            arg << argv[3];
+            arg << argv[4];
             arg >> primaryServer.port;
 
-            runBackupServer(primaryServer);
+            runBackupServer(itself, primaryServer);
+
         }else{
-            runPrimaryServer(port);
+            runPrimaryServer(itself.port);
         }
     }
 }

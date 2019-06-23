@@ -24,6 +24,7 @@ set(SOURCES
         src/infra/handler/SaveFileHandler.cpp
         src/infra/handler/SyncFileResponseHandler.cpp
         src/infra/handler/SyncEntriesResponseHandler.cpp
+        src/infra/handler/UpdateBackupsListHandler.cpp
         src/infra/synchronization/DefaultKeyLock.cpp
         src/infra/synchronization/ReadWriteLock.cpp
         src/infra/messaging/AsyncMessageListener.cpp
@@ -58,6 +59,7 @@ set(TESTFILES
         tests/infra/handler/ListClientEntriesCommandHandlerTest.cpp
         tests/infra/handler/ListServerEntriesCommandHandlerTest.cpp
         tests/infra/handler/ListServerEntriesResponseHandlerTest.cpp
+        tests/infra/handler/ListServerDirectoriesRequestTest.cpp
         tests/infra/handler/ListServerDirectoriesResponseTest.cpp
         tests/infra/handler/RemoveFileRequestTest.cpp
         tests/infra/handler/RemoveFileHandlerTest.cpp
@@ -80,7 +82,8 @@ set(TESTFILES
         tests/server/TimestampsTest.cpp
         tests/server/DefaultUserTest.cpp
         tests/server/ReplicaManagersTest.cpp
-	src/infra/handler/IpClientHandler.cpp
+        tests/infra/handler/UpdateBackupsListRequestTest.cpp
+
         )
 
 add_library(engine ${SOURCES})
