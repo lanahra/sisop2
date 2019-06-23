@@ -10,6 +10,7 @@
 #include "application/DefaultUserService.h"
 #include "infra/handler/DownloadFileHandler.h"
 #include "infra/handler/ListFileEntriesHandler.h"
+#include "infra/handler/IpClientHandler.h"
 #include "infra/handler/RemoveFileHandler.h"
 #include "infra/handler/SaveFileHandler.h"
 #include "infra/messaging/AsyncMessageListenerFactory.h"
@@ -97,6 +98,7 @@ void runPrimaryServer(int port) {
     DefaultUserRepository userRepository(fileRepository);
     DefaultKeyLock keyLock;
     DefaultUserService userService(userRepository, fileRepository, keyLock);
+    std::list<std::string> clientList;
 
     // create handler for command.establish_session
     auto listFileEntriesHandler
@@ -112,6 +114,8 @@ void runPrimaryServer(int port) {
 
     auto listServerDirsHandler = std::make_shared<ListServerDirectoriesHandler>(fileRepository, replicaManagers);
 
+    auto ipClientHandler = std::make_shared<IpClientHandler>();
+
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
     handlers["file.list.request"] = listFileEntriesHandler;
@@ -119,6 +123,7 @@ void runPrimaryServer(int port) {
     handlers["file.remove.request"] = removeFileHandler;
     handlers["file.upload.request"] = saveFileHandler;
     handlers["server.list.request"] = listServerDirsHandler;
+    handlers["server.ip.request"] = ipClientHandler;
 
     // factory for message listeners for every new connection
     OpenListenerLoop listenerLoop;
@@ -147,11 +152,10 @@ int main(int argc, char** argv) {
             arg.str("");
             arg << argv[3];
             arg >> primaryServer.port;
+
             runBackupServer(primaryServer);
         }else{
             runPrimaryServer(port);
         }
     }
 }
-
-

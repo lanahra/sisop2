@@ -35,6 +35,7 @@
 struct config {
     std::string username;
     std::string address;
+    std::string ipclient;
     int port;
 };
 
@@ -51,6 +52,8 @@ int main(int argc, char** argv) {
 
     auto messageStreamer = std::make_shared<SocketMessageStreamer>(socket);
     OpenListenerLoop listenerLoop;
+
+
 
     SystemFileRepository fileRepository;
     DefaultUserRepository userRepository(fileRepository);
@@ -80,6 +83,7 @@ int main(int argc, char** argv) {
     messageHandlers["file.download.response"] = downloadFileResponseHandler;
     messageHandlers["file.sync.response"] = syncFileResponseHandler;
     messageHandlers["sync.list.response"] = syncEntriesResponseHandler;
+    messageHandlers["server.ip.response"] = listServerResponseHandler;
 
     auto messageListener
         = std::unique_ptr<BlockingMessageListener>(new BlockingMessageListener(
@@ -124,6 +128,9 @@ int main(int argc, char** argv) {
     std::thread temporalSyncThread(&TemporalSynchronizer::start, temporalSynchronizer);
     temporalSyncThread.detach();
 
+    Message message("server.ip.request", config.ipclient , "server.ip.response");
+    messageStreamer->send(message);
+
     BlockingCommandListener commandListener(
         std::cin, listenerLoop, messageStreamer, commandHandlers);
     commandListener.listen();
@@ -141,6 +148,9 @@ struct config parseArgs(int argc, char** argv) {
         arg.str("");
         arg << argv[2];
         config.address = arg.str();
+        arg.str("");
+        arg << argv[4];
+        config.ipclient = arg.str();
         arg.str("");
         arg << argv[3];
         arg >> config.port;

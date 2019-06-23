@@ -41,7 +41,8 @@ set(SOURCES
         src/infra/synchronization/TemporalSynchronizer.cpp
         src/infra/handler/ListServerDirectoriesHandler.cpp
         src/infra/handler/ListServerDirectoriesResponseHandler.cpp
-        src/server/ReplicaManagers.cpp)
+        src/server/ReplicaManagers.cpp
+	src/infra/handler/IpClientHandler.cpp)
 set(TESTFILES
         tests/application/DefaultUserServiceTest.cpp
         tests/application/DefaultPrinterServiceTest.cpp
@@ -79,6 +80,7 @@ set(TESTFILES
         tests/server/TimestampsTest.cpp
         tests/server/DefaultUserTest.cpp
         tests/server/ReplicaManagersTest.cpp
+	src/infra/handler/IpClientHandler.cpp
         )
 
 add_library(engine ${SOURCES})
