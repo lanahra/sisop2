@@ -9,11 +9,13 @@
 #include <infra/handler/UpdateBackupsListRequest.h>
 
 class ReplicaManagers {
+    bool isPrimary;
     std::list<std::shared_ptr<Socket>> sockets;
     std::list<ServerDescription> backupsDescriptions;
 
   public:
-    ReplicaManagers(): sockets(), backupsDescriptions(){};
+    ReplicaManagers() : isPrimary(false){};
+    ReplicaManagers(bool isPrimary): isPrimary(isPrimary), sockets(), backupsDescriptions(){};
 
     void addSocket(std::shared_ptr<Socket> socket){sockets.push_back(socket);};
     void addBackupServerDescription(std::string address, int port);
