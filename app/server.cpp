@@ -179,8 +179,6 @@ void runServer(struct ServerDescription itself, struct ServerDescription primary
         connectionListener.listen(itself.port);
     }
 
-
-
     // factory for message listeners for every new connection
     OpenListenerLoop listenerLoop;
     AsyncMessageListenerFactory factory(listenerLoop, handlers);
