@@ -25,6 +25,8 @@ set(SOURCES
         src/infra/handler/SyncFileResponseHandler.cpp
         src/infra/handler/SyncEntriesResponseHandler.cpp
         src/infra/handler/UpdateBackupsListHandler.cpp
+        src/infra/handler/StartAreYouAliveCommandHandler.cpp
+        src/infra/handler/DummyMessageHandler.cpp
         src/infra/synchronization/DefaultKeyLock.cpp
         src/infra/synchronization/ReadWriteLock.cpp
         src/infra/messaging/AsyncMessageListener.cpp

@@ -1,6 +1,7 @@
 #include <map>
 #include <memory>
 #include <sstream>
+#include <thread>
 #include <infra/handler/ListServerDirectoriesResponse.h>
 #include <infra/handler/ListServerDirectoriesResponseHandler.h>
 #include <infra/handler/DownloadFileResponseHandler.h>
@@ -28,6 +29,9 @@
 #include "infra/handler/ListServerDirectoriesHandler.h"
 #include <../include/server/ServerDescription.h>
 #include <infra/handler/UpdateBackupsListHandler.h>
+#include <infra/synchronization/TemporalSynchronizer.h>
+#include <infra/handler/StartAreYouAliveCommandHandler.h>
+#include <infra/handler/DummyMessageHandler.h>
 
 void runPrimaryServer(int port);
 
@@ -96,6 +100,16 @@ void runBackupServer(struct ServerDescription itself, struct ServerDescription p
     Message message("server.list.request", serialized.str(), "server.list.response");
     messageStreamer->send(message);
 
+    // start are yoy alive
+    auto startAreYouAliveCommandHandler = std::make_shared<StartAreYouAliveCommandHandler>("are.you.alive");
+    auto temporalSynchronizer
+            = std::make_shared<TemporalSynchronizer>(startAreYouAliveCommandHandler,
+                                                     *messageStreamer,
+                                                     listenerLoop,
+                                                     1000);
+    std::thread temporalSyncThread(&TemporalSynchronizer::start, temporalSynchronizer);
+    temporalSyncThread.detach();
+
     while (listenerLoop.isOpen()){
 
     }
@@ -125,6 +139,8 @@ void runServer(struct ServerDescription itself, struct ServerDescription primary
 
     auto ipClientHandler = std::make_shared<IpClientHandler>(replicaManagers);
 
+    auto dummyMessageHandler = std::make_shared<DummyMessageHandler>();
+
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
     handlers["file.list.request"] = listFileEntriesHandler;
@@ -133,6 +149,7 @@ void runServer(struct ServerDescription itself, struct ServerDescription primary
     handlers["file.upload.request"] = saveFileHandler;
     handlers["server.list.request"] = listServerDirsHandler;
     handlers["server.ip.request"] = ipClientHandler;
+    handlers["are.you.alive"] = dummyMessageHandler;
 
 
     auto listServerDirsResponseHandler = std::make_shared<ListServerDirectoriesResponseHandler>();
@@ -167,8 +184,18 @@ void runServer(struct ServerDescription itself, struct ServerDescription primary
         Message message("server.list.request", serialized.str(), "server.list.response");
         messageStreamer->send(message);
 
-        // factory for message listeners for every new connection
         OpenListenerLoop listenerLoop;
+        // start are yoy alive
+        auto startAreYouAliveCommandHandler = std::make_shared<StartAreYouAliveCommandHandler>("are.you.alive");
+        auto temporalSynchronizer
+                = std::make_shared<TemporalSynchronizer>(startAreYouAliveCommandHandler,
+                                                         *messageStreamer,
+                                                         listenerLoop,
+                                                         1000);
+        std::thread temporalSyncThread(&TemporalSynchronizer::start, temporalSynchronizer);
+        temporalSyncThread.detach();
+
+        // factory for message listeners for every new connection
         AsyncMessageListenerFactory factory(listenerLoop, handlers);
 
         // starts listening for connections
