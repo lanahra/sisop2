@@ -5,7 +5,7 @@
 using ::testing::Eq;
 
 TEST(ReplicaManagersTest, AddSocket) {
-    ReplicaManagers replicaManagers = ReplicaManagers();
+    ReplicaManagers replicaManagers = ReplicaManagers(true);
     std::shared_ptr<TcpSocket> aSocket = std::make_shared<TcpSocket>(123);
     EXPECT_THAT(replicaManagers.getSockets().size(), Eq(0));
     replicaManagers.addSocket(aSocket);
