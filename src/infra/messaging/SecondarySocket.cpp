@@ -98,6 +98,13 @@ void SecondarySocket::assumePrimary() {
 
         replicaManagers.broadcastNewBackupsList();
 
+        for (std::string client : clients) {
+            auto socket = std::make_shared<TcpSocket>();
+            socket->connect(client, 4567);
+            auto listener = factory.listenerFor(socket);
+            listener->listen();
+        }
+
         std::thread t([&] { connectionListener.listen(self.port); });
         t.detach();
     }

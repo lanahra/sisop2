@@ -5,7 +5,7 @@
 using ::testing::Eq;
 
 TEST(ReplicaManagersTest, AddSocket) {
-    ReplicaManagers replicaManagers = ReplicaManagers();
+    ReplicaManagers replicaManagers;
     std::shared_ptr<TcpSocket> aSocket = std::make_shared<TcpSocket>(123);
     EXPECT_THAT(replicaManagers.getSockets().size(), Eq(0));
     replicaManagers.addSocket(aSocket);
@@ -13,7 +13,7 @@ TEST(ReplicaManagersTest, AddSocket) {
 }
 
 TEST(ReplicaManagersTest, AddServerDescription) {
-    ReplicaManagers replicaManagers = ReplicaManagers();
+    ReplicaManagers replicaManagers;
     replicaManagers.addBackupServerDescription("127.0.0.1", 45120);
     struct ServerDescription serverDescription;
     serverDescription = replicaManagers.getBackupsDescriptions().front();

@@ -20,6 +20,7 @@ class SecondarySocket : public Socket {
     bool elected;
     AsyncMessageListenerFactory& factory;
     ConnectionListener& connectionListener;
+    std::list<std::string>& clients;
 
     bool isElected();
     void assumePrimary();
@@ -31,7 +32,8 @@ class SecondarySocket : public Socket {
                     int timeout,
                     ReplicaManagers& replicaManagers,
                     AsyncMessageListenerFactory& factory,
-                    ConnectionListener& connectionListener)
+                    ConnectionListener& connectionListener,
+                    std::list<std::string>& clients)
         : socket(std::make_shared<TcpSocket>()),
           self(self),
           timeout(timeout),
@@ -39,7 +41,8 @@ class SecondarySocket : public Socket {
           assume(true),
           elected(false),
           factory(factory),
-          connectionListener(connectionListener){};
+          connectionListener(connectionListener),
+          clients(clients){};
     ~SecondarySocket();
     void listen(int port) override;
     std::shared_ptr<Socket> accept() override;

@@ -59,7 +59,8 @@ void runServer(struct ServerDescription self,
     auto listServerDirsHandler = std::make_shared<ListServerDirectoriesHandler>(
         fileRepository, replicaManagers);
 
-    auto ipClientHandler = std::make_shared<IpClientHandler>(replicaManagers);
+    auto ipClientHandler
+        = std::make_shared<IpClientHandler>(replicaManagers, clientList);
 
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
@@ -105,7 +106,7 @@ void runServer(struct ServerDescription self,
         connectionListener.listen(self.port);
     } else {
         auto socket = std::make_shared<SecondarySocket>(
-            self, 10, replicaManagers, factory, connectionListener);
+            self, 10, replicaManagers, factory, connectionListener, clientList);
         socket->connect(primary.address, primary.port);
         auto messageStreamer = std::make_shared<SocketMessageStreamer>(socket);
 

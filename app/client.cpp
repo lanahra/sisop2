@@ -124,7 +124,8 @@ int main(int argc, char** argv) {
     auto temporalSynchronizer
             = std::make_shared<TemporalSynchronizer>(syncCommandHandler,
                                                      *messageStreamer,
-                                                     listenerLoop);
+                                                     listenerLoop,
+                                                     1000);
     std::thread temporalSyncThread(&TemporalSynchronizer::start, temporalSynchronizer);
     temporalSyncThread.detach();
 
@@ -137,7 +138,7 @@ int main(int argc, char** argv) {
 }
 
 struct config parseArgs(int argc, char** argv) {
-    if (argc < 4) {
+    if (argc < 5) {
         std::cout << "username address port expected" << std::endl;
         exit(EXIT_FAILURE);
     } else {
