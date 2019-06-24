@@ -1,4 +1,5 @@
 #include <map>
+#include <vector>
 #include <memory>
 #include <sstream>
 #include <infra/handler/ListServerDirectoriesResponse.h>
@@ -41,6 +42,7 @@ void runBackupServer(struct ServerDescription itself, struct ServerDescription p
     DefaultKeyLock keyLock;
     DefaultUserService userService(userRepository, fileRepository, keyLock);
     OpenListenerLoop listenerLoop;
+    std::vector<std::string> clientList;
 
     auto socket = std::make_shared<TcpSocket>();
     socket->connect(primaryServer.address, primaryServer.port);
@@ -69,7 +71,7 @@ void runBackupServer(struct ServerDescription itself, struct ServerDescription p
 
     auto updateBackupsListHandler = std::make_shared<UpdateBackupsListHandler>(replicaManagers);
 
-    auto ipClientHandler = std::make_shared<IpClientHandler>(emptyReplicaManagers);
+    auto ipClientHandler = std::make_shared<IpClientHandler>(emptyReplicaManagers, clientList);
 
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> messageHandlers;
@@ -106,7 +108,7 @@ void runPrimaryServer(int port) {
     DefaultUserRepository userRepository(fileRepository);
     DefaultKeyLock keyLock;
     DefaultUserService userService(userRepository, fileRepository, keyLock);
-    std::list<std::string> clientList;
+    std::vector<std::string> clientList;
 
     // create handler for command.establish_session
     auto listFileEntriesHandler
@@ -122,7 +124,7 @@ void runPrimaryServer(int port) {
 
     auto listServerDirsHandler = std::make_shared<ListServerDirectoriesHandler>(fileRepository, replicaManagers);
 
-    auto ipClientHandler = std::make_shared<IpClientHandler>(replicaManagers);
+    auto ipClientHandler = std::make_shared<IpClientHandler>(replicaManagers, clientList);
 
     // register handlers
     std::map<std::string, std::shared_ptr<MessageHandler>> handlers;
