@@ -64,7 +64,7 @@ void runBackupServer(struct ServerDescription itself, struct ServerDescription p
     auto syncEntriesResponseHandler
             = std::make_shared<SyncEntriesResponseHandler>(endpoints, userService);
 
-    ReplicaManagers emptyReplicaManagers, replicaManagers;
+    ReplicaManagers emptyReplicaManagers(false), replicaManagers(false);
     auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService, emptyReplicaManagers);
 
     auto saveFileHandler = std::make_shared<SaveFileHandler>(userService, emptyReplicaManagers);
@@ -103,7 +103,8 @@ void runBackupServer(struct ServerDescription itself, struct ServerDescription p
     }
 }
 
-void runPrimaryServer(int port) {
+void runServer(struct ServerDescription itself, struct ServerDescription primaryServer) {
+    bool isPrimary = (itself.address == primaryServer.address && itself.port == primaryServer.port);
     SystemFileRepository fileRepository;
     DefaultUserRepository userRepository(fileRepository);
     DefaultKeyLock keyLock;
@@ -117,7 +118,7 @@ void runPrimaryServer(int port) {
     auto downloadFileHandler
             = std::make_shared<DownloadFileHandler>(userService);
 
-    ReplicaManagers replicaManagers;
+    ReplicaManagers replicaManagers(isPrimary);
     auto removeFileHandler = std::make_shared<RemoveFileHandler>(userService, replicaManagers);
 
     auto saveFileHandler = std::make_shared<SaveFileHandler>(userService, replicaManagers);
@@ -135,6 +136,51 @@ void runPrimaryServer(int port) {
     handlers["server.list.request"] = listServerDirsHandler;
     handlers["server.ip.request"] = ipClientHandler;
 
+
+    auto listServerDirsResponseHandler = std::make_shared<ListServerDirectoriesResponseHandler>();
+    auto downloadFileResponseHandler
+            = std::make_shared<DownloadFileResponseHandler>(userService, std::cout);
+    auto syncFileResponseHandler = std::make_shared<SyncFileResponseHandler>(userService);
+    SyncEndpoints endpoints
+            = SyncEndpoints::Builder()
+                    .withDownloadFile("file.download.request", "file.sync.response")
+                    .withRemoveFile("file.remove.request")
+                    .withUploadFile("file.upload.request")
+                    .build();
+    auto syncEntriesResponseHandler
+            = std::make_shared<SyncEntriesResponseHandler>(endpoints, userService);
+    auto updateBackupsListHandler = std::make_shared<UpdateBackupsListHandler>(replicaManagers);
+
+    handlers["server.list.response"] = listServerDirsResponseHandler;
+    handlers["file.download.response"] = downloadFileResponseHandler;
+    handlers["file.sync.response"] = syncFileResponseHandler;
+    handlers["sync.list.response"] = syncEntriesResponseHandler;
+    handlers["backup.servers.update"] = updateBackupsListHandler;
+
+    if(!isPrimary){
+        auto asocket = std::make_shared<TcpSocket>();
+        asocket->connect(primaryServer.address, primaryServer.port);
+        auto messageStreamer = std::make_shared<SocketMessageStreamer>(asocket);
+
+        // first sync between backup and primary
+        ListServerDirectoriesRequest listServerDirectoriesRequest(itself.address, itself.port);
+        std::stringstream serialized;
+        serialized << listServerDirectoriesRequest;
+        Message message("server.list.request", serialized.str(), "server.list.response");
+        messageStreamer->send(message);
+
+        // factory for message listeners for every new connection
+        OpenListenerLoop listenerLoop;
+        AsyncMessageListenerFactory factory(listenerLoop, handlers);
+
+        // starts listening for connections
+        TcpSocket socket;
+        ConnectionListener connectionListener(socket, listenerLoop, factory);
+        connectionListener.listen(itself.port);
+    }
+
+
+
     // factory for message listeners for every new connection
     OpenListenerLoop listenerLoop;
     AsyncMessageListenerFactory factory(listenerLoop, handlers);
@@ -142,7 +188,7 @@ void runPrimaryServer(int port) {
     // starts listening for connections
     TcpSocket socket;
     ConnectionListener connectionListener(socket, listenerLoop, factory);
-    connectionListener.listen(port);
+    connectionListener.listen(itself.port);
 }
 
 int main(int argc, char** argv) {
@@ -168,7 +214,7 @@ int main(int argc, char** argv) {
             runBackupServer(itself, primaryServer);
 
         }else{
-            runPrimaryServer(itself.port);
+            runServer(itself, itself);
         }
     }
 }
