@@ -6,17 +6,19 @@
 #include <infra/messaging/ListenerLoop.h>
 
 class TemporalSynchronizer {
-    std::shared_ptr<ListServerEntriesCommandHandler> syncCommandHandler;
+    std::shared_ptr<CommandHandler> commandHandler;
     MessageStreamer& messageStreamer;
     ListenerLoop& listenerLoop;
+    int sleepInMillis;
 
 public:
-    TemporalSynchronizer(std::shared_ptr<ListServerEntriesCommandHandler> syncCommandHandler,
+    TemporalSynchronizer(std::shared_ptr<CommandHandler> commandHandler,
                          MessageStreamer &messageStreamer,
-                         ListenerLoop &listenerLoop)
-    : syncCommandHandler(syncCommandHandler),
+                         ListenerLoop &listenerLoop, int sleepInMillis)
+    : commandHandler(commandHandler),
       messageStreamer(messageStreamer),
-      listenerLoop(listenerLoop) {};
+      listenerLoop(listenerLoop),
+      sleepInMillis(sleepInMillis) {};
     void start();
 };
 

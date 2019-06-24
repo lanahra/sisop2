@@ -124,7 +124,8 @@ int main(int argc, char** argv) {
     auto temporalSynchronizer
             = std::make_shared<TemporalSynchronizer>(syncCommandHandler,
                                                      *messageStreamer,
-                                                     listenerLoop);
+                                                     listenerLoop,
+                                                     1000);
     std::thread temporalSyncThread(&TemporalSynchronizer::start, temporalSynchronizer);
     temporalSyncThread.detach();
 
