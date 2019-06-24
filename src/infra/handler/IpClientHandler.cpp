@@ -10,11 +10,9 @@ void IpClientHandler::handle(Message message, MessageStreamer& messageStreamer) 
       clientList.push_back(ipclient);
   }
 
-    //clientList.push_back(ipclient);
     for(int i=0; i < clientList.size(); i++){
-
       std::cout << clientList.at(i) << ' ';
     }
-    std::cout << clientList.size() << std::endl;
+
 
 }
