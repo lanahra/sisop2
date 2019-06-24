@@ -3,6 +3,7 @@
 
 #include "../../server/ServerDescription.h"
 #include <list>
+#include <iostream>
 
 class UpdateBackupsListRequest{
     std::list<struct ServerDescription> backupsDescriptions;

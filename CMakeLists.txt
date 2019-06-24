@@ -35,6 +35,7 @@ set(SOURCES
         src/infra/messaging/SocketMessageStreamer.cpp
         src/infra/messaging/TcpSocket.cpp
         src/infra/messaging/ReconnectableTcpSocket.cpp
+        src/infra/messaging/SecondarySocket.cpp
         src/infra/repository/DefaultUserRepository.cpp
         src/infra/repository/SystemFileRepository.cpp
         src/server/File.cpp
@@ -43,7 +44,7 @@ set(SOURCES
         src/infra/handler/ListServerDirectoriesHandler.cpp
         src/infra/handler/ListServerDirectoriesResponseHandler.cpp
         src/server/ReplicaManagers.cpp
-	src/infra/handler/IpClientHandler.cpp)
+	    src/infra/handler/IpClientHandler.cpp)
 set(TESTFILES
         tests/application/DefaultUserServiceTest.cpp
         tests/application/DefaultPrinterServiceTest.cpp
